@@ -1,0 +1,12 @@
+export { default as Button } from './Button';
+export { default as InputForm } from './InputForm';
+export { default as SearchItem } from './SearchItem';
+export { default as ProvinceButton } from './ProvinceButton';
+export { default as Province } from './Province';
+export { default as ItemsNewpaper } from './ItemsNewpaper';
+export { default as PageNumber } from './PageNumber';
+export { default as ItemSidebar } from './ItemSidebar';
+export { default as WhyUs } from './WhyUs';
+export { default as Contact } from './Contact';
+export { default as ItemRelatedPost } from './ItemRelatedPost';
+export { default as RelatedPost } from './RelatedPost';

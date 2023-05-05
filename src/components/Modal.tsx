@@ -9,7 +9,7 @@ interface props {
     name: string;
     content: any;
     queries: { [key: string]: any }
-    handleSubmit: (event: React.MouseEvent<HTMLInputElement, MouseEvent>, queries: {}) => void
+    handleSubmit: (event: React.MouseEvent<HTMLInputElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>, queries: {}) => void
 }
 
 export const Modal = (props: props) => {
@@ -31,6 +31,23 @@ export const Modal = (props: props) => {
             }
         }
     };
+    const handleRanges = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        let maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 0;
+        let minValue = +props.content[0].value.match(/\d+/)[0] || 0;
+        const minValueToPercentage = round(persent1 * maxValue / 100, 0);
+        const maxValueToPercentage = round(persent2 * maxValue / 100, 0);
+        let value = ''
+        if (persent1 === 100 && persent2 === 100) {
+            value = props.title === 'prices' ? `Trên ${maxValueToPercentage} triệu` : `Trên ${maxValueToPercentage} m2`
+        } else {
+            value = props.title === 'prices' ? `Từ ${minValueToPercentage}  - ${maxValueToPercentage} triệu` : `Từ ${minValueToPercentage}m2 - ${maxValueToPercentage} m2`
+        }
+
+        props.handleSubmit(event, {
+            [props.title]: value,
+            [`${props.title}Code`]: [minValueToPercentage, maxValueToPercentage]
+        })
+    }
 
     const handleButtonRange = (code: string, value: string) => {
         let maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 0;
@@ -63,11 +80,7 @@ export const Modal = (props: props) => {
         let maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 0;
         let minValue = +props.content[0].value.match(/\d+/)[0] || 0;
         //rounding with step is 0.5
-        return props.title === 'prices'
-            ? round((maxValue * percent) / 100, 0.5)
-            : props.title === 'areas'
-                ? round((maxValue * percent) / 100, 0.5)
-                : 0;
+        return round((maxValue * percent) / 100, 0.5)
     };
 
     useEffect(() => {
@@ -222,6 +235,7 @@ export const Modal = (props: props) => {
                         <button
                             type="button"
                             className="w-full bg-orange-400 py-2 font-medium rounded-bl-md rounded-br-md mt-6"
+                            onClick={(event) => handleRanges(event)}
                         >
                             Áp dụng
                         </button>
@@ -240,7 +254,7 @@ export const Modal = (props: props) => {
                       name={props.title}
                       id={item.code}
                       value={item.value}
-                      checked={!props.queries[`${props.title}Code`]}
+                      checked={item.code === props.queries[`${props.title}Code`]}
                       onClick={(event) => props.handleSubmit(event, {
                           [props.title]: item.value,
                           [`${props.title}Code`]: item.code

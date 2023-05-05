@@ -8,7 +8,7 @@ const SearchItem = ({IconBefore, IconAfter, text, fontWeight, defaultTitle}: ISe
             <div className="flex items-center ">
                 <IconAfter className="bg-[rgb(156, 163, 175)]"/>
                 <span
-                    className={fontWeight && `${fontWeight} text-ellipsis overflow-hidden whitespace-nowrap w-[100px] ${text ? 'font-medium text-black' : ''} `}>
+                    className={`${fontWeight && 'font-medium text-black'} w-[100px] ${text ? 'font-medium text-black' : ''} overflow-hidden text-ellipsis whitespace-nowrap`}>
           {text || defaultTitle}
         </span>
             </div>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 // require("dotenv").config();
 const instance = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: 'https://api-projectsern.onrender.com',
 });
 // Add a request interceptor
 instance.interceptors.request.use(

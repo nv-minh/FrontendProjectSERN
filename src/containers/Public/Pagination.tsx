@@ -3,6 +3,7 @@ import {PageNumber} from '../../components';
 import {useSelector} from 'react-redux';
 import {GrLinkNext, GrLinkPrevious} from 'react-icons/gr';
 import {RootState} from '../../store/interface';
+import {useLocation} from "react-router-dom";
 
 interface props {
     itemsNumber?: number;
@@ -15,11 +16,12 @@ const Pagination = (props: props) => {
     const queryPage = +props.queryPage;
     const [currentPage, setCurrentPage] = useState(queryPage);
     let maxPage = count && (props?.itemsNumber && Math.floor(count / props?.itemsNumber)) || 1;
+    const location = useLocation()
+    const queryFilter = location?.state?.queries
     useEffect(() => {
         let end = currentPage + 1 > maxPage ? maxPage : currentPage + 2;
         let start = currentPage - 1 >= 4 ? currentPage - 2 : 1;
         let temp = [];
-
         if (maxPage !== 1) {
             for (let i = start; i <= end; i++) {
                 temp.push(i);
@@ -38,8 +40,9 @@ const Pagination = (props: props) => {
                     key={(Math.random() + 1).toString(36).substring(7)}
                     icon={<GrLinkPrevious/>}
                     page={'1'}
-                    currentPage={props.queryPage}
+                    currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
+                    queryFilter={queryFilter}
                 />
             )}
             {currentPage > 6 && <PageNumber page="..."/>}
@@ -49,8 +52,9 @@ const Pagination = (props: props) => {
                         <PageNumber
                             key={(Math.random() + 1).toString(36).substring(7)}
                             page={item.toString()}
-                            currentPage={props.queryPage}
+                            currentPage={currentPage}
                             setCurrentPage={setCurrentPage}
+                            queryFilter={queryFilter}
                         />
                     );
                 })}{' '}
@@ -62,6 +66,7 @@ const Pagination = (props: props) => {
                         icon={<GrLinkNext/>}
                         page={maxPage.toString()}
                         setCurrentPage={setCurrentPage}
+                        queryFilter={queryFilter}
                     />
                 </>
             )}

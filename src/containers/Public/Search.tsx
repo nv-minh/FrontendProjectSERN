@@ -1,10 +1,16 @@
 import SearchItem from '../../components/SearchItem';
 import icons from '../../ultils/icons';
-import React, {useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {Modal} from '../../components/Modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {PostsAction, RootState} from '../../store/interface';
 import * as actions from '../../store/actions'
+import Swal from "sweetalert2";
+import {useNavigate} from "react-router";
+import {createSearchParams} from "react-router-dom";
+import path from '../../ultils/constant';
+import {formatVietnameseToString} from "../../ultils/Common/formatVietnameseToString";
+
 
 const {
     BsChevronRight,
@@ -12,28 +18,20 @@ const {
     TbReportMoney,
     RiCrop2Line,
     MdOutlineHouseSiding,
-    FiSearch,
+    FiSearch
 } = icons;
-const Search = () => {
+
+
+const Search = ({queriesEmpty}: { queriesEmpty: { [key: string]: any } }) => {
     const [isShowModal, setIsShowModal] = useState(false);
     const [title, setTitle] = useState('');
-    const [queries, setQueries] = useState<{ [key: string]: any }>({
-        categoriesCode: "",
-        categories: "",
-        provincesCode: "",
-        provinces: "",
-        pricesCode: "",
-        prices: "",
-        areasCode: "",
-        areas: ""
-    });
-
+    const [queries, setQueries] = useState<{ [key: string]: any }>(queriesEmpty);
     const [name, setName] = useState('');
     const [content, setContent] = useState<any>([]);
     const {provinces, prices, areas, categories} = useSelector(
         (state: RootState) => state.app,
     );
-
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const handleShowModal = (title: string, content: any, name: string) => {
@@ -42,6 +40,10 @@ const Search = () => {
         setContent(content);
         setIsShowModal(true);
     };
+    useEffect(() => {
+        setQueries(queriesEmpty)
+    }, [queriesEmpty]);
+
     const handleSearch = () => {
         let queryPrice: Number[] = queries.pricesCode
         let queryArea: Number[] = queries.areasCode
@@ -53,7 +55,33 @@ const Search = () => {
             categoryCode,
             provinceCode,
         }) as unknown as PostsAction)
-        setIsShowModal(false)
+        let titleSearch = `${queries.categories
+            ? queries.categories
+            : 'Cho thuê tất cả'} ${queries.provinces
+            ? `tỉnh ${queries.provinces}`
+            : ''} ${queries.prices
+            ? `giá ${queries.prices}`
+            : ''} ${queries.areas
+            ? `diện tích ${queries.areas}` : ''} `
+        navigate({
+            pathname: path.SEARCH,
+            search: createSearchParams(formatVietnameseToString(titleSearch)).toString(),
+        }, {
+            state: {
+                titleSearch, queries: {
+                    queryPrice,
+                    queryArea,
+                    categoryCode,
+                    provinceCode,
+                }
+            }
+        })
+        Swal.fire(
+            'Good job!',
+            // `Bạn đã tìm kiếm phòng trọ với tiêu chí : ${queries.categories} ${queries.provinces} ${queries.prices} ${queries.areas}`,
+            `Bạn đã tìm kiếm phòng trọ với tiêu chí :${titleSearch}`,
+            'success'
+        )
     }
     const handleSubmit = (event: React.MouseEvent<HTMLInputElement, MouseEvent> | React.MouseEvent<HTMLButtonElement, MouseEvent>, queries: {
         [key: string]: any

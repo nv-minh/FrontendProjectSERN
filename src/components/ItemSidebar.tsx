@@ -6,6 +6,7 @@ import {formatVietnameseToString} from '../ultils/Common/formatVietnameseToStrin
 import {useDispatch} from 'react-redux';
 import {apiGetPostsLimit} from '../services';
 import * as actions from '../store/actions';
+import Swal from "sweetalert2";
 
 const {GrNext} = icons;
 
@@ -33,26 +34,36 @@ const ItemSidebar = (props: props) => {
     ) => {
         event.preventDefault();
         navigate(formatVietnameseToString(url));
-
-        if (url.includes('thuê')) {
-            dispatch(
-                actions.getPostsLimit(+queryPage, {
-                    categoryCode: queryFilter,
-                }) as unknown as PostsAction,
-            );
-        } else if (url.includes('m')) {
-            dispatch(
-                actions.getPostsLimit(+queryPage, {
-                    queryArea: [1, 2],
-                }) as unknown as PostsAction,
-            );
-        } else {
-            dispatch(
-                actions.getPostsLimit(+queryPage, {
-                    queryPrice: [1, 2],
-                }) as unknown as PostsAction,
-            );
+        const matches = url.match(/\d/g);
+        const secondValue = matches ? matches[1] : 9999;
+        const firstValue = matches ? matches[0] : 0;
+        switch (true) {
+            case url.includes('thuê'):
+                dispatch(actions.getPostsLimit(+queryPage, {categoryCode: queryFilter}) as unknown as PostsAction);
+                break;
+            case url.includes('m'):
+                if (secondValue === null && +firstValue === 20) {
+                    dispatch(actions.getPostsLimit(+queryPage, {queryArea: [0, 20]}) as unknown as PostsAction);
+                } else if (secondValue === null && +firstValue === 90) {
+                    dispatch(actions.getPostsLimit(+queryPage, {queryArea: [90, secondValue]}) as unknown as PostsAction);
+                } else {
+                    dispatch(actions.getPostsLimit(+queryPage, {queryArea: [+firstValue, +secondValue]}) as unknown as PostsAction);
+                }
+                break;
+            default:
+                if (secondValue === null && +firstValue === 1) {
+                    dispatch(actions.getPostsLimit(+queryPage, {queryPrice: [0, 1]}) as unknown as PostsAction);
+                } else if (secondValue === null && +firstValue === 15) {
+                    dispatch(actions.getPostsLimit(+queryPage, {queryPrice: [15, secondValue]}) as unknown as PostsAction);
+                } else {
+                    dispatch(actions.getPostsLimit(+queryPage, {queryPrice: [+firstValue, +secondValue]}) as unknown as PostsAction);
+                }
         }
+        Swal.fire(
+            'Good job!',
+            `Bạn đã tìm kiếm phòng trọ với tiêu chí : ${url}`,
+            'success'
+        )
     };
 
     return (

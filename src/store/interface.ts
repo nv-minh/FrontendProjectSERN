@@ -17,7 +17,7 @@ export interface RootStatePosts {
     newsPost?: [];
     message: string;
     count?: number;
-    queryFilter?: IQueryFilter;
+    queryFilter?: IQueryFilter | undefined;
 }
 
 export interface IQueryFilter {

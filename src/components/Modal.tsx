@@ -13,9 +13,38 @@ interface props {
 }
 
 export const Modal = (props: props) => {
+    let maxValue = 1
+    let minValue = 1
+    if (props.title === 'prices' || props.title === 'areas') {
+        maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 1;
+        minValue = +props.content[0].value.match(/\d+/)[0] || 1;
+    }
     const [persent1, setPersent1] = useState(20);
     const [persent2, setPersent2] = useState(50);
     const [activeEl, setActiveEl] = useState('');
+    let value = ''
+    if (props.title === 'prices') {
+        value = props.queries.prices
+    } else {
+        value = props.queries.areas
+    }
+    useEffect(() => {
+            if (props.queries.pricesCode[1] && props.title === 'prices') {
+                setPersent1(props.queries.pricesCode[0] * 100 / maxValue)
+                setPersent2(props.queries.pricesCode[1] * 100 / maxValue)
+                // setActiveEl(props.);
+            } else if (props.queries.pricesCode[0] && props.title === 'prices') {
+                setPersent1(props.queries.pricesCode[0] * 100 / maxValue)
+                setPersent2(props.queries.pricesCode[0] * 100 / maxValue)
+            } else if (props.queries.areasCode[1] && props.title === 'areas') {
+                setPersent1(props.queries.areasCode[0] * 100 / maxValue)
+                setPersent2(props.queries.areasCode[1] * 100 / maxValue)
+            } else if (props.queries.areasCode[0] && props.title === 'areas') {
+                setPersent1(props.queries.areasCode[0] * 100 / maxValue)
+                setPersent2(props.queries.areasCode[0] * 100 / maxValue)
+            }
+        },
+        []);
 
     const handleChangeRange = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const stackElement = document.getElementById('track');
@@ -32,15 +61,14 @@ export const Modal = (props: props) => {
         }
     };
     const handleRanges = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        let maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 0;
-        let minValue = +props.content[0].value.match(/\d+/)[0] || 0;
         const minValueToPercentage = round(persent1 * maxValue / 100, 0);
         const maxValueToPercentage = round(persent2 * maxValue / 100, 0);
-        let value = ''
         if (persent1 === 100 && persent2 === 100) {
             value = props.title === 'prices' ? `Trên ${maxValueToPercentage} triệu` : `Trên ${maxValueToPercentage} m2`
+        } else if (persent1 === 0 && minValue === maxValue * persent2 / 100) {
+            value = props.title === 'prices' ? `Dưới ${maxValueToPercentage} triệu` : `Dưới ${maxValueToPercentage} m2`
         } else {
-            value = props.title === 'prices' ? `Từ ${minValueToPercentage}  - ${maxValueToPercentage} triệu` : `Từ ${minValueToPercentage}m2 - ${maxValueToPercentage} m2`
+            value = props.title === 'prices' ? `Từ ${minValueToPercentage} - ${maxValueToPercentage} triệu` : `Từ ${minValueToPercentage}m - ${maxValueToPercentage}m`
         }
 
         props.handleSubmit(event, {
@@ -49,10 +77,8 @@ export const Modal = (props: props) => {
         })
     }
 
-    const handleButtonRange = (code: string, value: string) => {
-        let maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 0;
-        let minValue = +props.content[0].value.match(/\d+/)[0] || 0;
-        const range = value.match(/\d+/g);
+    const handleButtonRange = (code: string, values: string) => {
+        const range = values.match(/\d+/g);
         if (range && range[1]) {
             setPersent1(round((+range[0] * 100) / maxValue, 0));
             setPersent2(round((+range[1] * 100) / maxValue, 0));
@@ -65,8 +91,10 @@ export const Modal = (props: props) => {
                 setPersent2((minValue * 100) / maxValue);
             }
         }
+        value = values
+        setActiveEl(code)
+        // TODO: FIXME
 
-        setActiveEl(code);
     };
 
     function round(value: number, step: number) {
@@ -77,10 +105,7 @@ export const Modal = (props: props) => {
 
     // TODO fixbug type any
     const convertPercenttoValue = (percent: number) => {
-        let maxValue = +props.content[props.content.length - 1].value.match(/\d+/)[0] || 0;
-        let minValue = +props.content[0].value.match(/\d+/)[0] || 0;
-        //rounding with step is 0.5
-        return round((maxValue * percent) / 100, 0.5)
+        return round((maxValue * percent) / 100, 1)
     };
 
     useEffect(() => {
@@ -224,6 +249,8 @@ export const Modal = (props: props) => {
                                         key={item.code}
                                         className={`px-4 py-2 bg-gray-200 rounded-md cursor-pointer ${
                                             item.code === activeEl ? '!bg-blue-600 text-white' : ''
+                                        } ${
+                                            item.value === value ? '!bg-blue-600 text-white' : ''
                                         }`}
                                         onClick={() => handleButtonRange(item.code, item.value)}
                                     >

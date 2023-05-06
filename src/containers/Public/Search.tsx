@@ -43,8 +43,8 @@ const Search = () => {
         setIsShowModal(true);
     };
     const handleSearch = () => {
-        let queryPrice: string = queries.pricesCode
-        let queryArea: string = queries.areasCode
+        let queryPrice: Number[] = queries.pricesCode
+        let queryArea: Number[] = queries.areasCode
         let categoryCode: string = queries.categoriesCode
         let provinceCode: string = queries.provincesCode
         dispatch(actions.getPostsLimit(1, {
@@ -115,7 +115,7 @@ const Search = () => {
 
           />
         </span>
-                <span className="flex-1 cursor-pointer" onClick={() => setIsShowModal(true)}>
+                <span className="flex-1 cursor-pointer">
           <button
               type="button"
               className="flex items-center justify-center w-full px-4 py-2 text-sm text-white bg-blue-100 rounded-md outline-non"

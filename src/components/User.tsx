@@ -1,7 +1,6 @@
-import { CurrentUserAction, RootState } from '../store/interface';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import * as actions from '../store/actions';
+import { RootState } from '../store/interface';
+import { useSelector } from 'react-redux';
+
 import anonAvatar from '../assets/anon-avatar.png';
 
 const User = () => {

@@ -83,7 +83,7 @@ export interface CurrentUserAction extends RootCurrentUser {
 }
 
 export interface RootState {
-  auth: AuthAction;
+  auth: RootStateAuth;
   user: RootCurrentUser;
   posts: RootStatePosts;
   newsPost: RootStatePosts;

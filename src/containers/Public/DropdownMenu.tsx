@@ -78,8 +78,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2 text-blue-600 border-b border-gray-200 w-[200px] "
             onClick={() => {
               setIsOpen(false);
-              dispatch(actions.logout());
               Swal.fire('Warning', 'Bạn sẽ đăng xuất!', 'warning');
+              dispatch(actions.logout());
             }}
           >
             <AiOutlineLogout />

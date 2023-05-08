@@ -43,7 +43,6 @@ export const getPostsLimit =
                     provinceCode
                 };
                 const response = await apiGetPostsLimit(props);
-                console.log(response)
                 if (response?.data.success) {
                     dispatch({
                         type: actionType.GET_POSTS_LIMIT,

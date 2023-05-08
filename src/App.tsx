@@ -5,6 +5,7 @@ import Home from './containers/Public/Home';
 import React from 'react';
 
 import { DetailPost, HomePage, Login, Register } from './containers/Public';
+import { System } from './containers/System/index';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
           <Route path={path.CHO_THUE_PHONG_TRO} element={<HomePage />} />
           <Route path={path.NHA_CHO_THUE} element={<HomePage />} />
           <Route path={path.DETAIL_POST_TITLE_POSTID} element={<DetailPost />} />
+        </Route>
+        <Route path={path.SYSTEM} element={<System />}>
+          {/*<Route path={path.CREATE_POST} element={<CreatePost />} />*/}
         </Route>
       </Routes>
     </div>

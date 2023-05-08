@@ -55,6 +55,7 @@ export interface IAttributes {
 export interface IProVinceButton {
     name: string;
     image: string;
+    code: string
 }
 
 export interface ISearchItemProps {
@@ -66,7 +67,7 @@ export interface ISearchItemProps {
 }
 
 export interface IUser {
-    userName: string;
+    name: string;
     phone: string;
     password: string;
 }

@@ -2,17 +2,16 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/logowithoutbg.png';
-import { Button } from '../../components';
+import { Button, User } from '../../components';
 import icons from '../../ultils/icons';
 import path from '../../ultils/constant';
 import { useSelector, useDispatch } from 'react-redux';
-import * as actions from '../../store/actions';
-import Swal from 'sweetalert2';
+import { AuthAction, RootState } from '../../store/interface';
+import DropdownMenu from './DropdownMenu';
 
 const { FaPlusCircle } = icons;
 const Header = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const headerRef = useRef<HTMLInputElement>(null);
   const location = useLocation();
   useEffect(() => {
@@ -21,7 +20,7 @@ const Header = () => {
     }
   }, [location]);
 
-  const { isLoggedIn } = useSelector((state: any) => state.auth);
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const goLogin = useCallback((flag: string) => {
     navigate(path.LOGIN, { state: { flag } });
   }, []);
@@ -29,6 +28,23 @@ const Header = () => {
   const goRegister = useCallback((flag: string) => {
     navigate(path.REGISTER, { state: { flag } });
   }, []);
+
+  // handle event dropdown
+  const dropdownButton = document.getElementById('dropdown-button');
+  const dropdownMenu = dropdownButton?.nextElementSibling;
+
+  dropdownButton?.addEventListener('click', () => {
+    dropdownMenu?.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (event) => {
+    if (
+      !(event.target instanceof Node) ||
+      (!dropdownButton?.contains(event.target) && !dropdownMenu?.contains(event.target))
+    ) {
+      dropdownMenu?.classList.add('hidden');
+    }
+  });
   return (
     <div ref={headerRef} className="w-[70%]">
       <div className="flex items-center justify-around w-full">
@@ -54,15 +70,10 @@ const Header = () => {
             </>
           )}
           {isLoggedIn && (
-            <Button
-              text="Đăng Xuất"
-              textColor="text-white"
-              bgColor="!bg-[#3961fb]"
-              onClick={() => {
-                dispatch(actions.logout() as unknown as any);
-                Swal.fire('Warning', 'Bạn sẽ đăng xuất!', 'warning');
-              }}
-            />
+            <>
+              <User />
+              <DropdownMenu buttonLabel={'quản lý tài khoản'} />
+            </>
           )}
           <Button
             text="Đăng Tin Mới"

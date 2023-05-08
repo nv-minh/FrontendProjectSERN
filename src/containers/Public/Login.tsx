@@ -3,29 +3,28 @@ import { NavLink } from 'react-router-dom';
 import { Button } from '../../components';
 import InputForm from '../../components/InputForm';
 import path from '../../ultils/constant';
-import { apiLogin } from '../../services/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions';
 import { useNavigate } from 'react-router';
-import { IUser } from './../../interface';
-import { useSelector } from 'react-redux';
+import { IUser } from '../../interface';
 import Swal from 'sweetalert2';
+import { AuthAction, RootState } from '../../store/interface';
+import actionType from '../../store/actions/actionType';
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState({
-    userName: '',
+    name: '',
     phone: '',
     password: '',
   });
   const [invalidFields, setInvalidFields] = useState<Array<Object>>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { update } = useSelector((state: any) => state.auth);
 
   const validate = (loginForm: IUser) => {
     let invalid = 0;
     let fields = Object.entries(loginForm);
-
+    setInvalidFields([]);
     fields.slice(1).forEach((field) => {
       if (field[1] === '') {
         setInvalidFields((previous) => [
@@ -63,23 +62,33 @@ const Login = () => {
             ]);
             invalid++;
           }
+          break;
       }
     });
     return invalid;
   };
+
   const handleClickButton = async () => {
     try {
-      let invalids = await validate(loginForm);
+      let invalids = validate(loginForm);
       if (invalids === 0) {
-        const loginData = await apiLogin(loginForm);
-        dispatch(actions.login(loginForm) as unknown as any);
-        if (loginData?.data.success === true) {
-          Swal.fire('successfully!', loginData?.data.message, 'success');
+        const loginResult = await dispatch(
+          actions.login(loginForm) as unknown as AuthAction,
+        );
+        if (loginResult.type === actionType.LOGIN_SUCCESS) {
+          setLoginForm({ name: '', phone: '', password: '' });
+          await Swal.fire(
+            'Good job!',
+            'Chúc mừng bạn đã đăng nhập thành công!',
+            'success',
+          );
           navigate('/');
-          setLoginForm({ userName: '', phone: '', password: '' });
         } else {
-          loginData?.data.message &&
-            Swal.fire('Oops !', loginData?.data.message, 'error');
+          await Swal.fire(
+            'Error!',
+            'Có lỗi khi đăng nhập tài khoản, có thể do tài khoản mật khẩu sai hoặc do vấn đề về mạng!',
+            'error',
+          );
         }
       }
     } catch (error) {

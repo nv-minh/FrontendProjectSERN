@@ -2,11 +2,16 @@ import { RootState } from '../store/interface';
 import { useSelector } from 'react-redux';
 
 import anonAvatar from '../assets/anon-avatar.png';
+import Loading from './Loading';
 
 const User = () => {
   const { currentData } = useSelector((state: RootState) => state.user);
   if (currentData.id === '') {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   } else {
     return (
       <div className="flex items-center gap-2">

@@ -1,13 +1,14 @@
-import { SelectAddress } from './index';
 import { useEffect, useState } from 'react';
 import {
   apiGetPublicDistricts,
   apiGetPublicProvinces,
   apiGetPublicWards,
 } from '../services';
-import { IOptions } from './SelectAddress';
+import { IOptions } from './SelectField';
+import { payload } from '../containers/System/CreatePost';
+import { SelectField } from './index';
 
-const Address = () => {
+const Address = ({ payload, setPayload }: payload) => {
   const [provinces, setProvinces] = useState<IOptions[]>([]);
   const [districts, setDistricts] = useState<IOptions[]>([]);
   const [wards, setWards] = useState<IOptions[]>([]);
@@ -31,41 +32,50 @@ const Address = () => {
       : ''
   }${districtName && ' , ' + districtName} ${wardName && ' , ' + wardName}`;
   useEffect(() => {
-    const fetchPublicProvinces = async () => {
+    async function fetchData() {
       if (!provinceCode) {
         const response = await apiGetPublicProvinces();
         setProvinces(response?.data.results);
-      } else if (!districtCode) {
-        const responseDistrict = await apiGetPublicDistricts(provinceCode);
-        setDistricts(responseDistrict?.data.results);
       } else {
+        const responseDistrict = await apiGetPublicDistricts(provinceCode);
+        setWardCode('');
+        setDistricts(responseDistrict?.data.results);
+      }
+    }
+
+    fetchData();
+  }, [provinceCode]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (districtCode) {
         const responseWard = await apiGetPublicWards(districtCode);
         setWards(responseWard?.data.results);
       }
-    };
-    fetchPublicProvinces();
-  }, [provinceCode]);
+    }
 
+    fetchData();
+  }, [districtCode]);
   return (
     <div>
       <h2 className="font-semibold text-xl py-4">Địa chỉ cho thuê</h2>
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
-          <SelectAddress
+          <SelectField
             label={'Tỉnh/Thành phố'}
             options={provinces}
             value={provinceCode}
             setValue={setProvinceCode}
             key={(Math.random() + 1).toString(36).substring(7)}
           />
-          <SelectAddress
+          <SelectField
             label={'Quận/Huyện'}
             value={districtCode}
             setValue={setDistrictCode}
             options={districts}
             key={(Math.random() + 1).toString(36).substring(7)}
           />
-          <SelectAddress
+          <SelectField
             label={'Phường/Xã'}
             value={wardCode}
             setValue={setWardCode}

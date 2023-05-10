@@ -66,7 +66,7 @@ const SelectField = ({ label, options, setValue, name, value }: props) => {
                   : label === 'Quận/Huyện'
                   ? item?.district_name
                   : label === 'Phường/Xã'
-                  ? item?.ward_id
+                  ? item?.ward_name
                   : item?.value}
               </option>
             );

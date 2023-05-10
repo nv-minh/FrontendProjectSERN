@@ -78,8 +78,20 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2 text-blue-600 border-b border-gray-200 w-[200px] "
             onClick={() => {
               setIsOpen(false);
-              Swal.fire('Warning', 'Bạn sẽ đăng xuất!', 'warning');
-              dispatch(actions.logout());
+              Swal.fire({
+                title: 'Bạn có muốn đăng xuất không ?',
+                text: 'Hãy suy nghĩ kĩ trước khi bấm!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, tôi muốn đăng xuất!',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  Swal.fire('Đã đăng xuất!', 'Bạn đã đăng xuất thành công!', 'success');
+                  dispatch(actions.logout());
+                }
+              });
             }}
           >
             <AiOutlineLogout />

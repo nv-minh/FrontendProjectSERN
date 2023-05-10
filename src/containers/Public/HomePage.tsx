@@ -69,7 +69,7 @@ const HomePage = () => {
           <img
             src={download}
             alt=""
-            className="object-cover w-full h-[400px] rounded-md"
+            className=" w-full h-[400px] rounded-md object-contain"
           />
         </div>
       </div>

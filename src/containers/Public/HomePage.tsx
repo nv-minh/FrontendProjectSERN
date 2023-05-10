@@ -9,7 +9,7 @@ import { CategoriesAction, PostsAction, RootState } from '../../store/interface'
 import { Dispatch } from 'redux';
 import { RelatedPost } from '../../components/index';
 import * as actions from '../../store/actions';
-import bla from '../../assets/bla.png';
+import download from '../../assets/download.png';
 
 const HomePage = () => {
   const { posts } = useSelector((state: RootState) => state.posts);
@@ -66,7 +66,11 @@ const HomePage = () => {
             key={(Math.random() + 1).toString(36).substring(7)}
           />
           <RelatedPost />
-          <img src={bla} alt="" className="object-cover w-full h-[400px] rounded-md" />
+          <img
+            src={download}
+            alt=""
+            className="object-cover w-full h-[400px] rounded-md"
+          />
         </div>
       </div>
       <div className="mt-5 mb-12 mr-56">

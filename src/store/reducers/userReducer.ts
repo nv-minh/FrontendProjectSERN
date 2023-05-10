@@ -1,5 +1,5 @@
 import actionTypes from '../actions/actionType';
-import { CurrentUserAction, ICurrentData, RootCurrentUser } from '../interface';
+import { CurrentUserAction, RootCurrentUser } from '../interface';
 
 const initState: RootCurrentUser = {
   currentData: {

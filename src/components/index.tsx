@@ -11,3 +11,6 @@ export { default as Contact } from './Contact';
 export { default as ItemRelatedPost } from './ItemRelatedPost';
 export { default as RelatedPost } from './RelatedPost';
 export { default as User } from './User';
+export { default as Address } from './Address';
+export { default as Overview } from './Overview';
+export { default as SelectAddress } from './SelectAddress';

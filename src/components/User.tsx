@@ -6,7 +6,7 @@ import Loading from './Loading';
 
 const User = () => {
   const { currentData } = useSelector((state: RootState) => state.user);
-  if (currentData.id === '') {
+  if (currentData && currentData?.id === '') {
     return (
       <div>
         <Loading />

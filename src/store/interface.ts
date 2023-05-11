@@ -7,7 +7,7 @@ export interface RootStateAuth {
 }
 
 export interface RootCurrentUser {
-  currentData: ICurrentData;
+  currentData?: ICurrentData;
 }
 
 export interface ICurrentData {

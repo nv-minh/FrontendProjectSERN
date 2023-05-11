@@ -1,6 +1,10 @@
 import { Address, Button, Loading, Overview } from '../../components';
 import { useState } from 'react';
 import { BsCameraFill } from 'react-icons/bs';
+import { RootState } from '../../store/interface';
+import { useSelector } from 'react-redux';
+import { apiUploadImages } from '../../services';
+import { ImBin } from 'react-icons/im';
 
 export interface payload {
   payload: {
@@ -8,7 +12,7 @@ export interface payload {
     title: string;
     priceNumber: number;
     areaNumber: number;
-    images: string;
+    images: any;
     address: string;
     priceCode: string;
     areaCode: string;
@@ -22,7 +26,7 @@ export interface payload {
       title: string;
       priceNumber: number;
       areaNumber: number;
-      images: string;
+      images: any;
       address: string;
       priceCode: string;
       areaCode: string;
@@ -39,7 +43,7 @@ const CreatePost = () => {
     title: '',
     priceNumber: 0,
     areaNumber: 0,
-    images: '',
+    images: [],
     address: '',
     priceCode: '',
     areaCode: '',
@@ -47,7 +51,34 @@ const CreatePost = () => {
     target: '',
     province: '',
   });
+  const [imagesPreview, setImagesPreview] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { prices, areas } = useSelector((state: RootState) => state.app);
+
+  const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    setIsLoading(true);
+    let images: any = [];
+    let files = event.target.files;
+    let formData = new FormData();
+    if (files)
+      for (let i = 0; i < files.length; i++) {
+        formData.append('file', files[i], files[i].name);
+        formData.append('upload_preset', 'qvqmwmjg');
+        let response = await apiUploadImages(formData);
+        if (response.status === 200) images = [...images, response.data?.secure_url];
+      }
+    setIsLoading(false);
+    setImagesPreview((prev: any) => [...prev, ...images]);
+    setPayload((prev: any) => ({ ...prev, images: [...prev.images, ...images] }));
+  };
+  const handleDeleteImage = (image: any) => {
+    setImagesPreview((prev: any) => prev?.filter((item: any) => item !== image));
+    setPayload((prev) => ({
+      ...prev,
+      images: prev.images?.filter((item) => item !== image),
+    }));
+  };
   return (
     <div className="px-6">
       <h1 className="text-3xl font-medium py-4 border-b border-gray-200">Đăng tin mới</h1>
@@ -72,28 +103,34 @@ const CreatePost = () => {
                   </div>
                 )}
               </label>
-              <input hidden type="file" id="file" multiple />
+              <input
+                hidden
+                type="file"
+                id="file"
+                multiple={true}
+                onChange={(event) => handleFiles(event)}
+              />
               <div className="w-full">
                 <h3 className="font-medium py-4">Ảnh đã chọn</h3>
                 <div className="flex gap-4 items-center">
-                  {/*{imagesPreview?.map((item) => {*/}
-                  {/*  return (*/}
-                  {/*    <div key={item} className="relative w-1/3 h-1/3 ">*/}
-                  {/*      <img*/}
-                  {/*        src={item}*/}
-                  {/*        alt="preview"*/}
-                  {/*        className="w-full h-full object-cover rounded-md"*/}
-                  {/*      />*/}
-                  {/*      <span*/}
-                  {/*        title="Xóa"*/}
-                  {/*        onClick={() => handleDeleteImage(item)}*/}
-                  {/*        className="absolute top-0 right-0 p-2 cursor-pointer bg-gray-300 hover:bg-gray-400 rounded-full"*/}
-                  {/*      >*/}
-                  {/*        <ImBin />*/}
-                  {/*      </span>*/}
-                  {/*    </div>*/}
-                  {/*  );*/}
-                  {/*})}*/}
+                  {imagesPreview?.map((item: any) => {
+                    return (
+                      <div key={item} className="relative w-1/3 h-1/3 ">
+                        <img
+                          src={item}
+                          alt="preview"
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                        <span
+                          title="Xóa"
+                          onClick={() => handleDeleteImage(item)}
+                          className="absolute top-0 right-0 p-2 cursor-pointer bg-gray-300 hover:bg-gray-400 rounded-full"
+                        >
+                          <ImBin />
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

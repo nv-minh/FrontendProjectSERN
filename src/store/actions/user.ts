@@ -26,8 +26,14 @@ export const getCurrent = () => async (dispatch: Dispatch<CurrentUserAction>) =>
           zalo: '',
         },
       });
+      dispatch({
+        type: actionType.LOGOUT,
+      });
     }
   } catch (error) {
+    dispatch({
+      type: actionType.LOGOUT,
+    });
     console.log(error);
   }
 };

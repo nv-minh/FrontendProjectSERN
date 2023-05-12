@@ -52,7 +52,7 @@ const Overview = ({ payload, setPayload }: payload) => {
             className="w-full rounded-md outline-none border border-gray-300 p-2"
             value={payload.description}
             onChange={(e) =>
-              setPayload((prev) => ({ ...prev, description: e.target.value }))
+              setPayload((prev) => ({ ...prev, ['description']: e.target.value }))
             }
           ></textarea>
         </div>

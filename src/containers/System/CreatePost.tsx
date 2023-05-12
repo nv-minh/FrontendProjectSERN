@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { BsCameraFill } from 'react-icons/bs';
 import { RootState } from '../../store/interface';
 import { useSelector } from 'react-redux';
-import { apiUploadImages } from '../../services';
+import { apiCreatePost, apiUploadImages } from '../../services';
 import { ImBin } from 'react-icons/im';
 
 export interface payload {
@@ -18,7 +18,7 @@ export interface payload {
     areaCode: string;
     description: string;
     target: string;
-    province: string;
+    province: string | undefined;
   };
   setPayload: React.Dispatch<
     React.SetStateAction<{
@@ -27,12 +27,12 @@ export interface payload {
       priceNumber: number;
       areaNumber: number;
       images: any;
-      address: string;
+      address: any;
       priceCode: string;
       areaCode: string;
       description: string;
       target: string;
-      province: string;
+      province: any;
     }>
   >;
 }
@@ -53,7 +53,8 @@ const CreatePost = () => {
   });
   const [imagesPreview, setImagesPreview] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { prices, areas } = useSelector((state: RootState) => state.app);
+  const { currentData } = useSelector((state: RootState) => state.user);
+  const { categories } = useSelector((state: RootState) => state.app);
 
   const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -79,6 +80,59 @@ const CreatePost = () => {
       images: prev.images?.filter((item) => item !== image),
     }));
   };
+
+  // my bad :((
+  const convertPriceToCode = (price: number) => {
+    switch (true) {
+      case price >= 2 && price <= 3:
+        return '2U3N';
+      case price <= 1:
+        return 'OU1N';
+      case price >= 1 && price <= 2:
+        return '1U2N';
+      case price >= 3 && price <= 5:
+        return '3U5N';
+      case price >= 7 && price <= 10:
+        return '7U0N';
+      case price >= 5 && price <= 7:
+        return '5U7N';
+      case price >= 10 && price <= 15:
+        return '1E1N';
+      case price >= 15:
+        return 'EU5N';
+    }
+  };
+  const convertAreaToCode = (area: number) => {
+    switch (true) {
+      case area >= 30 && area <= 50:
+        return '3UMD';
+      case area <= 20:
+        return 'ON2E';
+      case area >= 50 && area <= 70:
+        return '5UMD';
+      case area >= 20 && area <= 30:
+        return '2UMD';
+      case area >= 70 && area <= 90:
+        return '7UMD';
+      case area >= 90:
+        return 'EN9E';
+    }
+  };
+  const handleSubmit = async () => {
+    let finalPayload = {
+      ...payload,
+      priceNumber: payload.priceNumber / 1000000,
+      userId: currentData && currentData.id,
+      priceCode: convertPriceToCode(payload.priceNumber / 1000000),
+      areaCode: convertAreaToCode(payload.areaNumber),
+      target: payload.target || 'Tất cả',
+      label: `${categories?.find((item) => item.code === payload?.categoryCode)?.value} ${
+        payload?.province
+      }`,
+    };
+    await apiCreatePost(finalPayload);
+  };
+
   return (
     <div className="px-6">
       <h1 className="text-3xl font-medium py-4 border-b border-gray-200">Đăng tin mới</h1>
@@ -135,7 +189,12 @@ const CreatePost = () => {
               </div>
             </div>
           </div>
-          <Button text="Tạo mới" bgColor="bg-green-600" textColor="text-white" />
+          <Button
+            onClick={() => handleSubmit()}
+            text="Tạo mới"
+            bgColor="bg-green-600"
+            textColor="text-white"
+          />
         </div>
         <div className="w-[30%]  flex-none">Map</div>
       </div>

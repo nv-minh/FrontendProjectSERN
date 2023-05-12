@@ -42,6 +42,17 @@ export const apiGetNewsPost = async () => {
     return error;
   }
 };
+export const apiCreatePost = async (payload: any) => {
+  try {
+    return await axiosConfig({
+      method: 'post',
+      url: '/api/v1/post/create-post',
+      data: payload,
+    });
+  } catch (error) {
+    return error;
+  }
+};
 export const apiUploadImages = async (images: any) => {
   try {
     return await axiosDefault({

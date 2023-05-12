@@ -25,12 +25,13 @@ const Address = ({ payload, setPayload }: payload) => {
     ?.ward_name;
 
   wardName = wardName !== undefined ? wardName : '';
-  let valueInputReadOnly = `${
-    provinceCode
+  let provinceName =
+    provinceCode || ''
       ? provinces?.filter((item: IOptions) => item.province_id === provinceCode)[0]
           ?.province_name
-      : ''
-  }${districtName && ' , ' + districtName} ${wardName && ' , ' + wardName}`;
+      : '';
+  let valueInputReadOnly = `${provinceName && '' + provinceName}
+  ${districtName && ', ' + districtName} ${wardName && ' , ' + wardName}`;
   useEffect(() => {
     async function fetchData() {
       if (!provinceCode) {
@@ -56,6 +57,14 @@ const Address = ({ payload, setPayload }: payload) => {
 
     fetchData();
   }, [districtCode]);
+  useEffect(() => {
+    setPayload((prev) => ({
+      ...prev,
+      ['province']: provinceName,
+      ['address']: valueInputReadOnly,
+    }));
+  }, [provinceName, valueInputReadOnly]);
+
   return (
     <div>
       <h2 className="font-semibold text-xl py-4">Địa chỉ cho thuê</h2>

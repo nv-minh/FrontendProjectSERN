@@ -2,14 +2,37 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import path from './ultils/constant';
 import Home from './containers/Public/Home';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { DetailPost, HomePage, Login, Register } from './containers/Public';
 import { CreatePost, System } from './containers/System';
+import * as actions from './store/actions';
+import {
+  CategoriesAction,
+  CurrentUserAction,
+  PostsAction,
+  RootState,
+} from './store/interface';
+import { Dispatch } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function App() {
+  const dispatch: Dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    setTimeout(() => {
+      isLoggedIn && dispatch(actions.getCurrent() as unknown as CurrentUserAction);
+    }, 2000);
+  }, [isLoggedIn]);
+  useEffect(() => {
+    dispatch(actions.getPrice() as unknown as CategoriesAction);
+    dispatch(actions.getAreas() as unknown as CategoriesAction);
+    dispatch(actions.getProvinces() as unknown as CategoriesAction);
+    dispatch(actions.getNewsPost() as unknown as PostsAction);
+  }, []);
   return (
-    <div className="w-full h-full bg-primary">
+    <div className="w-full h-full bg-primary overflow-hidden">
       <Routes>
         <Route path={path.HOME} element={<Home />}>
           <Route path="*" element={<HomePage />} />

@@ -5,6 +5,8 @@ import { RootState } from '../../store/interface';
 import { useSelector } from 'react-redux';
 import { apiCreatePost, apiUploadImages } from '../../services';
 import { ImBin } from 'react-icons/im';
+import Swal from 'sweetalert2';
+import * as actions from '../../store/actions';
 
 export interface payload {
   payload: {
@@ -50,6 +52,15 @@ const CreatePost = () => {
     description: '',
     target: '',
     province: '',
+  });
+  const [errorValidation, setErrorValidation] = useState({
+    errorProvince: false,
+    errorCategory: false,
+    errorTitle: false,
+    errorTarget: false,
+    errorPrice: false,
+    errorArea: false,
+    errorDescription: false,
   });
   const [imagesPreview, setImagesPreview] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,7 +141,57 @@ const CreatePost = () => {
         payload?.province
       }`,
     };
-    await apiCreatePost(finalPayload);
+    setErrorValidation((prev) => ({
+      ...prev,
+      errorProvince: finalPayload.province === '',
+      errorCategory: finalPayload.categoryCode === '',
+      errorTitle: finalPayload.title === '',
+      errorTarget: finalPayload.target === '',
+      errorPrice:
+        finalPayload.priceNumber === undefined ||
+        finalPayload.priceNumber === null ||
+        finalPayload.priceNumber === 0,
+      errorArea:
+        finalPayload.areaNumber === undefined ||
+        finalPayload.areaNumber === null ||
+        finalPayload.areaNumber === 0,
+      errorDescription: finalPayload.description === '',
+    }));
+    if (
+      errorValidation.errorProvince ||
+      errorValidation.errorCategory ||
+      errorValidation.errorTitle ||
+      errorValidation.errorTarget ||
+      errorValidation.errorPrice ||
+      errorValidation.errorArea ||
+      errorValidation.errorDescription
+    ) {
+      await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
+    } else {
+      const response = await apiCreatePost(finalPayload);
+      if (response?.data.success) {
+        await Swal.fire(
+          'Bạn đã đăng tin thành công!',
+          'Chúc mừng bạn đã đăng tin thành công!',
+          'success',
+        );
+        setPayload({
+          categoryCode: '',
+          title: '',
+          priceNumber: 0,
+          areaNumber: 0,
+          images: [],
+          address: '',
+          priceCode: '',
+          areaCode: '',
+          description: '',
+          target: '',
+          province: '',
+        });
+      } else {
+        await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
+      }
+    }
   };
 
   return (
@@ -138,8 +199,22 @@ const CreatePost = () => {
       <h1 className="text-3xl font-medium py-4 border-b border-gray-200">Đăng tin mới</h1>
       <div className="flex gap-4">
         <div className="py-4 flex flex-col gap-8 flex-auto">
-          <Address payload={payload} setPayload={setPayload} />
-          <Overview payload={payload} setPayload={setPayload} />
+          <Address
+            payload={payload}
+            setPayload={setPayload}
+            errorValidation={errorValidation.errorProvince}
+          />
+
+          <Overview
+            payload={payload}
+            setPayload={setPayload}
+            errorCategory={errorValidation.errorCategory}
+            errorTitle={errorValidation.errorTitle}
+            errorTarget={errorValidation.errorTarget}
+            errorPrice={errorValidation.errorPrice}
+            errorArea={errorValidation.errorArea}
+            errorDescription={errorValidation.errorDescription}
+          />
           <div className="w-full mb-6">
             <h2 className="font-semibold text-xl py-4">Hình ảnh</h2>
             <small>Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn</small>

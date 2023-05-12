@@ -2,22 +2,12 @@ import { Outlet } from 'react-router';
 import Header from './Header';
 import Navigation from './Navigation';
 import Search from './Search';
-import React, { useEffect, useState } from 'react';
-import { WhyUs, Contact } from '../../components';
-import { useDispatch, useSelector } from 'react-redux';
-import { CurrentUserAction, RootState } from '../../store/interface';
-import * as actions from '../../store/actions';
+import React, { useState } from 'react';
+import { Contact, WhyUs } from '../../components';
 
 const Home = () => {
   const [queriesEmpty, setQueriesEmpty] = useState<{ [key: string]: any }>();
-  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
-  const { currentData } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    setTimeout(() => {
-      isLoggedIn && dispatch(actions.getCurrent() as unknown as CurrentUserAction);
-    }, 2000);
-  }, [isLoggedIn]);
+
   return (
     <div className="flex flex-col items-center w-full h-full gap-4">
       <Header />

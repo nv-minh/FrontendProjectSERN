@@ -7,7 +7,26 @@ const targets = [
   { code: 'Nam', value: 'Nam' },
   { code: 'Nữ', value: 'Nữ' },
 ];
-const Overview = ({ payload, setPayload }: payload) => {
+
+interface props extends payload {
+  errorCategory: boolean;
+  errorTitle: boolean;
+  errorTarget: boolean;
+  errorPrice: boolean;
+  errorArea: boolean;
+  errorDescription: boolean;
+}
+
+const Overview = ({
+  payload,
+  setPayload,
+  errorCategory,
+  errorTitle,
+  errorTarget,
+  errorPrice,
+  errorArea,
+  errorDescription,
+}: props) => {
   const { categories } = useSelector((state: RootState) => state.app);
   const { currentData } = useSelector((state: RootState) => state.user);
   let valuePrice = payload.priceNumber.toLocaleString('it-IT', {
@@ -27,6 +46,9 @@ const Overview = ({ payload, setPayload }: payload) => {
             options={categories}
             label="Loại chuyên mục"
           />
+          {errorCategory && (
+            <p className="italic text-red-500">Bạn cần chọn chuyên mục cho thuê!</p>
+          )}
         </div>
         <div>
           <label htmlFor="title">Tiêu đề</label>
@@ -41,6 +63,9 @@ const Overview = ({ payload, setPayload }: payload) => {
               }
             />
           </div>
+          {errorTitle && (
+            <p className="italic text-red-500">Tiêu đề không được để trống!</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -55,6 +80,9 @@ const Overview = ({ payload, setPayload }: payload) => {
               setPayload((prev) => ({ ...prev, ['description']: e.target.value }))
             }
           ></textarea>
+          {errorDescription && (
+            <p className="italic text-red-500">Nội dung mô tả không được để trống!</p>
+          )}
         </div>
         <div className="w-1/2 flex flex-col gap-4">
           <div className="flex flex-col gap-2 flex-1">
@@ -101,6 +129,11 @@ const Overview = ({ payload, setPayload }: payload) => {
                 đồng
               </span>
             </div>
+            {errorPrice && (
+              <p className="italic text-red-500">
+                Bạn cần điền dữ liệu cho giá tiền muốn cho thuê!
+              </p>
+            )}
             <small className="opacity-70">
               Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000
             </small>
@@ -127,6 +160,9 @@ const Overview = ({ payload, setPayload }: payload) => {
                 m2
               </span>
             </div>
+            {errorArea && (
+              <p className="italic text-red-500">Bạn cần điền dữ liệu cho diện tích!</p>
+            )}
           </div>
 
           <SelectField

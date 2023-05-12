@@ -8,14 +8,17 @@ import { IOptions } from './SelectField';
 import { payload } from '../containers/System/CreatePost';
 import { SelectField } from './index';
 
-const Address = ({ payload, setPayload }: payload) => {
+interface props extends payload {
+  errorValidation: boolean;
+}
+
+const Address = ({ payload, setPayload, errorValidation }: props) => {
   const [provinces, setProvinces] = useState<IOptions[]>([]);
   const [districts, setDistricts] = useState<IOptions[]>([]);
   const [wards, setWards] = useState<IOptions[]>([]);
   const [provinceCode, setProvinceCode] = useState<string>('');
   const [districtCode, setDistrictCode] = useState<string>('');
   const [wardCode, setWardCode] = useState<string>('');
-
   let districtName = districts?.filter(
     (item: IOptions) => item.district_id === districtCode,
   )[0]?.district_name;
@@ -103,6 +106,9 @@ const Address = ({ payload, setPayload }: payload) => {
             value={valueInputReadOnly}
           />
         </div>
+        {errorValidation && (
+          <p className="italic text-red-500">Bạn cần điền địa chỉ thành phố!</p>
+        )}
       </div>
     </div>
   );

@@ -1,31 +1,21 @@
 import { text } from '../../ultils/constant';
-import { Province } from '../../components/index';
+import { Province, RelatedPost } from '../../components/index';
 import { ListOfNewpapers, Pagination } from './index';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { ItemSidebar } from '../../components';
-import { CategoriesAction, PostsAction, RootState } from '../../store/interface';
-import { Dispatch } from 'redux';
-import { RelatedPost } from '../../components/index';
-import * as actions from '../../store/actions';
+import { RootState } from '../../store/interface';
 import download from '../../assets/download.png';
 
 const HomePage = () => {
   const { posts } = useSelector((state: RootState) => state.posts);
   const { categories, prices, areas } = useSelector((state: RootState) => state.app);
   const [params] = useSearchParams();
-  const dispatch: Dispatch<CategoriesAction> = useDispatch();
   let queryPage = params.get('page') || '1';
 
   const location = useLocation();
 
-  useEffect(() => {
-    dispatch(actions.getPrice() as unknown as CategoriesAction);
-    dispatch(actions.getAreas() as unknown as CategoriesAction);
-    dispatch(actions.getProvinces() as unknown as CategoriesAction);
-    dispatch(actions.getNewsPost() as unknown as PostsAction);
-  }, []);
   return (
     <div className="flex flex-col w-[70%] gap-3 ">
       <div>

@@ -33,7 +33,7 @@ const HomePage = () => {
       </div>
 
       <div className="flex w-full gap-3 ">
-        <div className=" w-[70%]  bg-white rounded-md border border-[#dedede]">
+        <div className=" w-[70%]  bg-white rounded-md border border-[#dedede] h-full">
           <ListOfNewpapers queryPage={queryPage} />
         </div>
         <div className="w-[30%]  rounded-md border border-[#dedede] flex flex-col gap-4 justify-start items-center">
@@ -56,11 +56,11 @@ const HomePage = () => {
             key={(Math.random() + 1).toString(36).substring(7)}
           />
           <RelatedPost />
-          <img
-            src={download}
-            alt=""
-            className=" w-full h-[400px] rounded-md object-contain"
-          />
+          {/*<img*/}
+          {/*  src={download}*/}
+          {/*  alt=""*/}
+          {/*  className=" w-full h-[400px] rounded-md object-contain"*/}
+          {/*/>*/}
         </div>
       </div>
       <div className="mt-5 mb-12 mr-56">

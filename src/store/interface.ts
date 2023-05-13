@@ -30,6 +30,7 @@ export interface IUserAction {
 export interface RootStatePosts {
   posts?: [];
   newsPost?: [];
+  yourPosts?: [];
   message: string;
   count?: number;
   queryFilter?: IQueryFilter | undefined;
@@ -71,6 +72,7 @@ export interface PostsAction extends RootStatePosts {
     | typeof actionType.GET_POSTS
     | typeof actionType.GET_POSTS_LIMIT
     | typeof actionType.GET_NEWSPOST
+    | typeof actionType.GET_POSTS_ADMIN
     | string;
 }
 
@@ -86,6 +88,5 @@ export interface RootState {
   auth: RootStateAuth;
   user: RootCurrentUser;
   posts: RootStatePosts;
-  newsPost: RootStatePosts;
   app: RootStateCategories;
 }

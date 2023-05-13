@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { apiCreatePost, apiUploadImages } from '../../services';
 import { ImBin } from 'react-icons/im';
 import Swal from 'sweetalert2';
-import * as actions from '../../store/actions';
 
 export interface payload {
   payload: {
@@ -39,7 +38,7 @@ export interface payload {
   >;
 }
 
-const CreatePost = () => {
+const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: any) => {
   const [payload, setPayload] = useState({
     categoryCode: '',
     title: '',
@@ -188,6 +187,7 @@ const CreatePost = () => {
           target: '',
           province: '',
         });
+        setImagesPreview([]);
       } else {
         await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
       }
@@ -195,14 +195,23 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="px-6">
-      <h1 className="text-3xl font-medium py-4 border-b border-gray-200">Đăng tin mới</h1>
+    <div
+      className="px-6 "
+      onClick={(event) => {
+        event.stopPropagation();
+        currentPost && setIsEdit(true);
+      }}
+    >
+      <h1 className="text-3xl font-medium py-4 border-b border-gray-200">
+        {currentPost ? `Chỉnh sửa tin đăng` : `Đăng tin mới`}
+      </h1>
       <div className="flex gap-4">
         <div className="py-4 flex flex-col gap-8 flex-auto">
           <Address
             payload={payload}
             setPayload={setPayload}
             errorValidation={errorValidation.errorProvince}
+            currentPost={currentPost}
           />
 
           <Overview
@@ -214,6 +223,7 @@ const CreatePost = () => {
             errorPrice={errorValidation.errorPrice}
             errorArea={errorValidation.errorArea}
             errorDescription={errorValidation.errorDescription}
+            currentPost={currentPost}
           />
           <div className="w-full mb-6">
             <h2 className="font-semibold text-xl py-4">Hình ảnh</h2>
@@ -242,39 +252,60 @@ const CreatePost = () => {
               <div className="w-full">
                 <h3 className="font-medium py-4">Ảnh đã chọn</h3>
                 <div className="flex gap-4 items-center">
-                  {imagesPreview?.map((item: any) => {
-                    return (
-                      <div key={item} className="relative w-1/3 h-1/3 ">
-                        <img
-                          src={item}
-                          alt="preview"
-                          className="w-full h-full object-cover rounded-md"
-                        />
-                        <span
-                          title="Xóa"
-                          onClick={() => handleDeleteImage(item)}
-                          className="absolute top-0 right-0 p-2 cursor-pointer bg-gray-300 hover:bg-gray-400 rounded-full"
-                        >
-                          <ImBin />
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {currentPost
+                    ? JSON.parse(currentPost[0].images.image).map((item: any) => {
+                        return (
+                          <div key={item} className="relative w-1/3 h-1/3 ">
+                            <img
+                              src={item}
+                              alt="preview"
+                              className="w-full h-full object-cover rounded-md"
+                            />
+                            <span
+                              title="Xóa"
+                              onClick={() => handleDeleteImage(item)}
+                              className="absolute top-0 right-0 p-2 cursor-pointer bg-gray-300 hover:bg-gray-400 rounded-full"
+                            >
+                              <ImBin />
+                            </span>
+                          </div>
+                        );
+                      })
+                    : imagesPreview?.map((item: any) => {
+                        return (
+                          <div key={item} className="relative w-1/3 h-1/3 ">
+                            <img
+                              src={item}
+                              alt="preview"
+                              className="w-full h-full object-cover rounded-md"
+                            />
+                            <span
+                              title="Xóa"
+                              onClick={() => handleDeleteImage(item)}
+                              className="absolute top-0 right-0 p-2 cursor-pointer bg-gray-300 hover:bg-gray-400 rounded-full"
+                            >
+                              <ImBin />
+                            </span>
+                          </div>
+                        );
+                      })}
                 </div>
               </div>
             </div>
           </div>
           <Button
             onClick={() => handleSubmit()}
-            text="Tạo mới"
+            text={currentPost ? 'Chỉnh sửa' : 'Tạo mới'}
             bgColor="bg-green-600"
             textColor="text-white"
           />
+          <div className="h-[100px] w-full "></div>
         </div>
+
         <div className="w-[30%]  flex-none">Map</div>
       </div>
     </div>
   );
 };
 
-export default CreatePost;
+export default PostEditor;

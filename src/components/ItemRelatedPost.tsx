@@ -19,17 +19,15 @@ const ItemRelatedPost = (props: props) => {
         alt="error"
         className="w-[65px] h-[65px] object-cover rounded-md flex-none "
       />
-      <div>
-        <div className="flex flex-col justify-between w-full gap-1 flex-auto">
-          <h4 className="text-blue-600 text-[14px] line-clamp-1 ">{props.posts.title}</h4>
-          <div className="flex items-center justify-between w-full">
-            <span className="text-sm font-medium text-green-500 ">
-              {props.posts.attributes.price}
-            </span>
-            <span className="text-sm text-gray-300">
-              {props.posts.createdAt && formatTime(props.posts.createdAt)}
-            </span>
-          </div>
+      <div className="flex flex-col justify-between w-full gap-1 flex-auto whitespace-nowrap overflow-hidden text-ellipsis  ">
+        <h4 className="text-blue-600 text-[14px] w-full ">{props.posts.title}</h4>
+        <div className="flex items-center justify-between w-full">
+          <span className="text-sm font-medium text-green-500 ">
+            {props.posts.attributes.price}
+          </span>
+          <span className="text-sm text-gray-300">
+            {props.posts.createdAt && formatTime(props.posts.createdAt)}
+          </span>
         </div>
       </div>
     </div>

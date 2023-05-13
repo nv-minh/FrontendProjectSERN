@@ -1,16 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import icons from '../ultils/icons';
 import { ICategories, PostsAction } from '../store/interface';
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { formatVietnameseToString } from '../ultils/Common/formatVietnameseToString';
 import { useDispatch } from 'react-redux';
-import { apiGetPostsLimit } from '../services';
 import * as actions from '../store/actions';
 import Swal from 'sweetalert2';
 

@@ -1,7 +1,7 @@
 import SelectField from './SelectField';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/interface';
-import { payload } from '../containers/System/CreatePost';
+import { payload } from '../containers/System/PostEditor';
 
 const targets = [
   { code: 'Nam', value: 'Nam' },
@@ -15,6 +15,7 @@ interface props extends payload {
   errorPrice: boolean;
   errorArea: boolean;
   errorDescription: boolean;
+  currentPost: any;
 }
 
 const Overview = ({
@@ -26,13 +27,20 @@ const Overview = ({
   errorPrice,
   errorArea,
   errorDescription,
+  currentPost,
 }: props) => {
   const { categories } = useSelector((state: RootState) => state.app);
   const { currentData } = useSelector((state: RootState) => state.user);
-  let valuePrice = payload.priceNumber.toLocaleString('it-IT', {
-    style: 'currency',
-    currency: 'VND',
-  });
+  let valuePrice =
+    currentPost && !payload.priceNumber
+      ? (currentPost[0].priceNumber * 1000000).toLocaleString('it-IT', {
+          style: 'currency',
+          currency: 'VND',
+        })
+      : payload.priceNumber.toLocaleString('it-IT', {
+          style: 'currency',
+          currency: 'VND',
+        });
 
   return (
     <div>
@@ -40,7 +48,11 @@ const Overview = ({
       <div className="w-full flex flex-col gap-4">
         <div className="w-1/2">
           <SelectField
-            value={payload.categoryCode}
+            value={
+              currentPost && !payload.categoryCode
+                ? currentPost[0].categoryCode
+                : payload.categoryCode
+            }
             setValue={setPayload}
             name="categoryCode"
             options={categories}
@@ -57,7 +69,7 @@ const Overview = ({
               type="text"
               id=" title"
               className="rounded-md outline-none border flex-auto border-gray-300 p-2 "
-              value={payload.title}
+              value={currentPost && !payload.title ? currentPost[0].title : payload.title}
               onChange={(e) =>
                 setPayload((prev) => ({ ...prev, ['title']: e.target.value }))
               }
@@ -75,7 +87,11 @@ const Overview = ({
             cols={30}
             rows={10}
             className="w-full rounded-md outline-none border border-gray-300 p-2"
-            value={payload.description}
+            value={
+              currentPost && !payload.description
+                ? currentPost[0].description.slice(1, -1)
+                : payload.description
+            }
             onChange={(e) =>
               setPayload((prev) => ({ ...prev, ['description']: e.target.value }))
             }
@@ -145,7 +161,11 @@ const Overview = ({
                 type="text"
                 id=" title"
                 className="rounded-tl-md rounded-bl-md  outline-none border flex-auto border-gray-300 p-2"
-                value={payload.areaNumber}
+                value={
+                  currentPost && !payload.areaNumber
+                    ? currentPost[0].areaNumber
+                    : payload.areaNumber
+                }
                 onChange={(e) => {
                   const matches = e.target.value
                     ? e.target.value.match(/\d/g)?.join('')
@@ -166,12 +186,19 @@ const Overview = ({
           </div>
 
           <SelectField
-            value={payload.target}
+            value={
+              currentPost && !payload.target
+                ? currentPost[0].overviews.target
+                : payload.target
+            }
             setValue={setPayload}
             name="target"
             options={targets}
             label="Đối tượng cho thuê"
           />
+          {errorTarget && (
+            <p className="italic text-red-500">Bạn cần chọn đối tượng cho thuê!</p>
+          )}
         </div>
       </div>
     </div>

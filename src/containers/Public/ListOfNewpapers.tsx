@@ -47,17 +47,19 @@ const ListOfNewpapers = (prop: prop) => {
           posts.map((item: IPost) => {
             const obj = JSON.parse(item.images.image);
             return (
-              <ItemsNewpaper
-                key={item?.id}
-                images={obj}
-                address={item.address}
-                attributes={item.attributes}
-                title={item.title}
-                description={item.description ? JSON.parse(item.description) : ''}
-                user={item.user}
-                star={item.star}
-                id={item?.id}
-              />
+              <div className=" flex-1">
+                <ItemsNewpaper
+                  key={item?.id}
+                  images={obj}
+                  address={item.address}
+                  attributes={item.attributes}
+                  title={item.title}
+                  description={item.description ? JSON.parse(item.description) : ''}
+                  user={item.user}
+                  star={item.star}
+                  id={item?.id}
+                />
+              </div>
             );
           })}
       </div>

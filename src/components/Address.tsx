@@ -5,14 +5,15 @@ import {
   apiGetPublicWards,
 } from '../services';
 import { IOptions } from './SelectField';
-import { payload } from '../containers/System/CreatePost';
+import { payload } from '../containers/System/PostEditor';
 import { SelectField } from './index';
 
 interface props extends payload {
   errorValidation: boolean;
+  currentPost: any[];
 }
 
-const Address = ({ payload, setPayload, errorValidation }: props) => {
+const Address = ({ payload, setPayload, errorValidation, currentPost }: props) => {
   const [provinces, setProvinces] = useState<IOptions[]>([]);
   const [districts, setDistricts] = useState<IOptions[]>([]);
   const [wards, setWards] = useState<IOptions[]>([]);
@@ -33,8 +34,14 @@ const Address = ({ payload, setPayload, errorValidation }: props) => {
       ? provinces?.filter((item: IOptions) => item.province_id === provinceCode)[0]
           ?.province_name
       : '';
-  let valueInputReadOnly = `${provinceName && '' + provinceName}
+  let valueInputReadOnly =
+    currentPost &&
+    currentPost[0]?.address !==
+      `${districtName && ', ' + districtName} ${wardName && ' , ' + wardName}`
+      ? `${currentPost[0]?.address}`
+      : `${provinceName && '' + provinceName}
   ${districtName && ', ' + districtName} ${wardName && ' , ' + wardName}`;
+
   useEffect(() => {
     async function fetchData() {
       if (!provinceCode) {

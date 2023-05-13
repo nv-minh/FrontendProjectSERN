@@ -13,7 +13,7 @@ export const apiGetAllPosts = async () => {
 };
 
 export interface props {
-  queryPage: number;
+  queryPage: Number;
   queryPrice?: Number[];
   queryArea?: Number[];
   categoryCode?: string;
@@ -28,6 +28,20 @@ export const apiGetPostsLimit = async (props: props) => {
       params: props,
     });
   } catch (error) {
+    return error;
+  }
+};
+export const apiGetPostsLimitAdmin = async (props: props) => {
+  try {
+    const response = await axiosConfig({
+      method: 'get',
+      url: `/api/v1/post/limit-admin`,
+      params: props,
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log('12345');
     return error;
   }
 };

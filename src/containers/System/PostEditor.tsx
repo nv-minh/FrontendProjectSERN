@@ -1,11 +1,12 @@
 import { Address, Button, Loading, Overview } from '../../components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsCameraFill } from 'react-icons/bs';
-import { RootState } from '../../store/interface';
-import { useSelector } from 'react-redux';
-import { apiCreatePost, apiUploadImages } from '../../services';
+import { PostsAction, RootState } from '../../store/interface';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiCreatePost, apiEditPost, apiUploadImages } from '../../services';
 import { ImBin } from 'react-icons/im';
 import Swal from 'sweetalert2';
+import * as actions from '../../store/actions';
 
 export interface payload {
   payload: {
@@ -20,6 +21,10 @@ export interface payload {
     description: string;
     target: string;
     province: string | undefined;
+    postId?: string;
+    attributesId?: string;
+    imagesId?: string;
+    overviewId?: string;
   };
   setPayload: React.Dispatch<
     React.SetStateAction<{
@@ -33,12 +38,16 @@ export interface payload {
       areaCode: string;
       description: string;
       target: string;
+      postId?: string;
       province: any;
+      attributesId?: string;
+      imagesId?: string;
+      overviewId?: string;
     }>
   >;
 }
 
-const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: any) => {
+const PostEditor = ({ currentPost, setIsEdit, setCurrentPost }: any) => {
   const [payload, setPayload] = useState({
     categoryCode: '',
     title: '',
@@ -65,6 +74,7 @@ const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: 
   const [isLoading, setIsLoading] = useState(false);
   const { currentData } = useSelector((state: RootState) => state.user);
   const { categories } = useSelector((state: RootState) => state.app);
+  const dispatch = useDispatch();
 
   const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -90,7 +100,7 @@ const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: 
       images: prev.images?.filter((item) => item !== image),
     }));
   };
-
+  // TODO: FIXME
   // my bad :((
   const convertPriceToCode = (price: number) => {
     switch (true) {
@@ -131,14 +141,57 @@ const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: 
   const handleSubmit = async () => {
     let finalPayload = {
       ...payload,
-      priceNumber: payload.priceNumber / 1000000,
+      postId: currentPost ? currentPost[0].id : null,
+      description:
+        currentPost && !payload.description
+          ? currentPost[0].description
+          : payload.description,
+      title: currentPost && !payload.title ? currentPost[0].title : payload.title,
+      province:
+        currentPost && !payload.province
+          ? currentPost[0].address.split(', ')[0]
+          : payload.province,
+      attributesId: currentPost ? currentPost[0].attributes.id : null,
+      categoryCode:
+        currentPost && !payload.categoryCode
+          ? currentPost[0].categoryCode
+          : payload.categoryCode,
+      imagesId: currentPost ? currentPost[0].images.id : null,
+      images:
+        currentPost && !payload.images
+          ? JSON.parse(currentPost[0].images.image)
+          : payload.images,
+      overviewId: currentPost ? currentPost[0].overviews.id : null,
+      priceNumber:
+        currentPost && !payload.priceNumber
+          ? currentPost[0].priceNumber
+          : payload.priceNumber / 1000000,
+      areaNumber:
+        currentPost && !payload.areaNumber
+          ? currentPost[0].areaNumber
+          : payload.areaNumber,
       userId: currentData && currentData.id,
-      priceCode: convertPriceToCode(payload.priceNumber / 1000000),
-      areaCode: convertAreaToCode(payload.areaNumber),
-      target: payload.target || 'Tất cả',
-      label: `${categories?.find((item) => item.code === payload?.categoryCode)?.value} ${
-        payload?.province
-      }`,
+      priceCode:
+        currentPost && !payload.priceNumber
+          ? convertPriceToCode(currentPost[0].priceNumber)
+          : convertPriceToCode(payload.priceNumber / 1000000),
+      areaCode:
+        currentPost && !payload.areaNumber
+          ? convertPriceToCode(currentPost[0].areaNumber)
+          : convertAreaToCode(payload.areaNumber),
+      target:
+        currentPost && !payload.target
+          ? currentPost[0].overviews.target
+          : payload.target || 'Tất cả',
+      label:
+        currentPost && !payload.province
+          ? `${
+              categories?.find((item) => item.code === currentPost[0].overviews.target)
+                ?.value
+            } ${currentPost[0].province}`
+          : `${categories?.find((item) => item.code === payload?.categoryCode)?.value} ${
+              payload?.province
+            }`,
     };
     setErrorValidation((prev) => ({
       ...prev,
@@ -167,29 +220,72 @@ const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: 
     ) {
       await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
     } else {
-      const response = await apiCreatePost(finalPayload);
-      if (response?.data.success) {
-        await Swal.fire(
-          'Bạn đã đăng tin thành công!',
-          'Chúc mừng bạn đã đăng tin thành công!',
-          'success',
-        );
-        setPayload({
-          categoryCode: '',
-          title: '',
-          priceNumber: 0,
-          areaNumber: 0,
-          images: [],
-          address: '',
-          priceCode: '',
-          areaCode: '',
-          description: '',
-          target: '',
-          province: '',
-        });
-        setImagesPreview([]);
+      console.log(finalPayload.images);
+      console.log(JSON.parse(currentPost[0].images.image));
+      if (
+        currentPost &&
+        currentPost[0].categoryCode === finalPayload.categoryCode &&
+        currentPost[0].title === finalPayload.title &&
+        currentPost[0].description === finalPayload.description &&
+        currentPost[0].priceNumber === finalPayload.priceNumber &&
+        currentPost[0].areaNumber === finalPayload.areaNumber &&
+        JSON.stringify(JSON.parse(currentPost[0].images.image)) ===
+          JSON.stringify(finalPayload.images)
+      ) {
+        await Swal.fire('Oops!', 'Thông tin không có gì để thay đổi!', 'info');
+      } else if (currentPost) {
+        const response = await apiEditPost(finalPayload);
+        if (response?.data.success) {
+          await dispatch(actions.getPostsLimitAdmin(1) as unknown as PostsAction);
+          await Swal.fire(
+            'Bạn đã sửa tin thành công!',
+            'Chúc mừng bạn đã sửa tin thành công!',
+            'success',
+          );
+          setPayload({
+            categoryCode: '',
+            title: '',
+            priceNumber: 0,
+            areaNumber: 0,
+            images: [],
+            address: '',
+            priceCode: '',
+            areaCode: '',
+            description: '',
+            target: '',
+            province: '',
+          });
+          setImagesPreview([]);
+          setCurrentPost([]);
+          setIsEdit(false);
+        } else {
+          await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
+        }
       } else {
-        await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
+        const response = await apiCreatePost(finalPayload);
+        if (response?.data.success) {
+          await Swal.fire(
+            'Bạn đã đăng tin thành công!',
+            'Chúc mừng bạn đã đăng tin thành công!',
+            'success',
+          );
+          setPayload({
+            categoryCode: '',
+            title: '',
+            priceNumber: 0,
+            areaNumber: 0,
+            images: [],
+            address: '',
+            priceCode: '',
+            areaCode: '',
+            description: '',
+            target: '',
+            province: '',
+          });
+          setImagesPreview([]);
+        } else {
+          await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'info');
+        }
       }
     }
   };
@@ -224,6 +320,7 @@ const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: 
             errorArea={errorValidation.errorArea}
             errorDescription={errorValidation.errorDescription}
             currentPost={currentPost}
+            setCurrentPost={setCurrentPost}
           />
           <div className="w-full mb-6">
             <h2 className="font-semibold text-xl py-4">Hình ảnh</h2>
@@ -252,8 +349,8 @@ const PostEditor = ({ currentPost, handleEditPost, setIsEdit, setCurrentPost }: 
               <div className="w-full">
                 <h3 className="font-medium py-4">Ảnh đã chọn</h3>
                 <div className="flex gap-4 items-center">
-                  {currentPost
-                    ? JSON.parse(currentPost[0].images.image).map((item: any) => {
+                  {currentPost && !imagesPreview
+                    ? JSON.parse(currentPost[0]?.images?.image).map((item: any) => {
                         return (
                           <div key={item} className="relative w-1/3 h-1/3 ">
                             <img

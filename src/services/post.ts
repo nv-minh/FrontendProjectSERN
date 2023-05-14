@@ -38,10 +38,8 @@ export const apiGetPostsLimitAdmin = async (props: props) => {
       url: `/api/v1/post/limit-admin`,
       params: props,
     });
-    console.log(response);
     return response;
   } catch (error) {
-    console.log('12345');
     return error;
   }
 };
@@ -62,6 +60,30 @@ export const apiCreatePost = async (payload: any) => {
       method: 'post',
       url: '/api/v1/post/create-post',
       data: payload,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+export const apiEditPost = async (payload: any) => {
+  try {
+    return await axiosConfig({
+      method: 'post',
+      url: '/api/v1/post/update-post',
+      data: payload,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+export const apiDeletePost = async (postId: string) => {
+  try {
+    return await axiosConfig({
+      method: 'post',
+      url: '/api/v1/post/delete-post',
+      params: {
+        postId,
+      },
     });
   } catch (error) {
     return error;

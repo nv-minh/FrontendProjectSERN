@@ -3,12 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import { path } from '../../ultils/constant';
 import { Header, Sidebar } from './';
-import { CurrentUserAction, RootState } from '../../store/interface';
+import { CurrentUserAction, PostsAction, RootState } from '../../store/interface';
 import * as actions from '../../store/actions';
 
 const System = () => {
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(actions.getPostsLimitAdmin(1) as unknown as PostsAction);
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       isLoggedIn && dispatch(actions.getCurrent() as unknown as CurrentUserAction);

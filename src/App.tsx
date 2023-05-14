@@ -5,7 +5,7 @@ import Home from './containers/Public/Home';
 import React, { useEffect } from 'react';
 
 import { DetailPost, HomePage, Login, Register } from './containers/Public';
-import { ManagePost, PostEditor, System } from './containers/System';
+import { EditAccout, ManagePost, PostEditor, System } from './containers/System';
 import * as actions from './store/actions';
 import {
   CategoriesAction,
@@ -47,6 +47,7 @@ function App() {
         <Route path={path.SYSTEM} element={<System />}>
           <Route path={path.CREATE_POST} element={<PostEditor />} />
           <Route path={path.MANAGE_POST} element={<ManagePost />} />
+          <Route path={path.EDIT_ACCOUNT} element={<EditAccout />} />
         </Route>
       </Routes>
     </div>

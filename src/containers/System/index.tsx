@@ -4,3 +4,4 @@ export { default as Sidebar } from './Sidebar';
 export { default as PostEditor } from './PostEditor';
 export { default as ManagePost } from './ManagePost';
 export { default as UpdatePost } from './UpdatePost';
+export { default as EditAccout } from './EditAccout';

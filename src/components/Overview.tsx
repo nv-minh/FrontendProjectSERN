@@ -16,6 +16,7 @@ interface props extends payload {
   errorArea: boolean;
   errorDescription: boolean;
   currentPost: any;
+  setCurrentPost: any;
 }
 
 const Overview = ({
@@ -28,6 +29,7 @@ const Overview = ({
   errorArea,
   errorDescription,
   currentPost,
+  setCurrentPost,
 }: props) => {
   const { categories } = useSelector((state: RootState) => state.app);
   const { currentData } = useSelector((state: RootState) => state.user);

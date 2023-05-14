@@ -2,7 +2,11 @@ import axios from 'axios';
 
 const instance = axios.create({
   baseURL: `http://localhost:5000`,
+  // paramsSerializer: {
+  //   serialize: (params) => Qs.stringify(params, { arrayFormat: 'brackets' }),
+  // },
 });
+
 // Add a request interceptor
 instance.interceptors.request.use(
   (config) => {

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { ItemSidebar } from '../../components';
 import { RootState } from '../../store/interface';
-import download from '../../assets/download.png';
 
 const HomePage = () => {
   const { posts } = useSelector((state: RootState) => state.posts);

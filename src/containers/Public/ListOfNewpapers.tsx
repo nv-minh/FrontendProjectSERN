@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, ItemsNewpaper } from '../../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostsLimit } from '../../store/actions/post';
 import { PostsAction, RootState } from '../../store/interface';
-import { useSearchParams } from 'react-router-dom';
 import { IPost } from '../../interface';
 
 interface prop {

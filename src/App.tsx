@@ -5,7 +5,7 @@ import Home from './containers/Public/Home';
 import React, { useEffect } from 'react';
 
 import { DetailPost, HomePage, Login, Register } from './containers/Public';
-import { EditAccout, ManagePost, PostEditor, System } from './containers/System';
+import { EditAccount, ManagePost, PostEditor, System } from './containers/System';
 import * as actions from './store/actions';
 import {
   CategoriesAction,
@@ -15,6 +15,7 @@ import {
 } from './store/interface';
 import { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
+import ContactMe from './containers/Public/ContactMe';
 
 function App() {
   const dispatch: Dispatch = useDispatch();
@@ -42,12 +43,14 @@ function App() {
           <Route path={path.CHO_THUE_MAT_BANG} element={<HomePage />} />
           <Route path={path.CHO_THUE_PHONG_TRO} element={<HomePage />} />
           <Route path={path.NHA_CHO_THUE} element={<HomePage />} />
+          <Route path={path.CONTACT} element={<ContactMe />} />
           <Route path={path.DETAIL_POST_TITLE_POSTID} element={<DetailPost />} />
+          <Route path={path.DETAIL} element={<DetailPost />} />
         </Route>
         <Route path={path.SYSTEM} element={<System />}>
           <Route path={path.CREATE_POST} element={<PostEditor />} />
           <Route path={path.MANAGE_POST} element={<ManagePost />} />
-          <Route path={path.EDIT_ACCOUNT} element={<EditAccout />} />
+          <Route path={path.EDIT_ACCOUNT} element={<EditAccount />} />
         </Route>
       </Routes>
     </div>

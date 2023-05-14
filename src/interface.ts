@@ -23,11 +23,11 @@ export interface IButtonProps {
 
 export interface IInputFormProps {
   label: string;
-  typeInput: string;
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<IUser>>;
+  typeInput?: string;
+  value: string | undefined;
+  setValue: any;
   type: string;
-  invalidFields: any[];
+  invalidFields?: any[];
 }
 
 // FIXME: bug invalidFields
@@ -68,6 +68,13 @@ export interface ISearchItemProps {
 
 export interface IUser {
   name: string;
-  phone: string;
-  password: string;
+  phone?: string;
+  password?: string;
+  avatar?: any;
+  content?: string;
 }
+
+declare var Blob: {
+  prototype: Blob;
+  new (): Blob;
+};

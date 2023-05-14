@@ -8,11 +8,13 @@ export const path = {
   CHO_THUE_PHONG_TRO: 'cho-thue-phong-tro',
   NHA_CHO_THUE: 'nha-cho-thue',
   DETAIL_POST_TITLE_POSTID: 'chi-tiet/:title/:postId',
+  DETAIL: 'chi-tiet',
   SEARCH: 'tim-kiem',
   SYSTEM: '/he-thong/*',
   CREATE_POST: 'tao-moi-bai-dang',
   MANAGE_POST: 'quan-ly-bai-dang',
   EDIT_ACCOUNT: 'sua-thong-tin-ca-nhan',
+  CONTACT: 'lien-he',
 };
 
 export const text = {

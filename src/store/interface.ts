@@ -29,6 +29,7 @@ export interface IUserAction {
 
 export interface RootStatePosts {
   posts?: [];
+  data?: any;
   newsPost?: [];
   yourPosts?: [];
   message: string;

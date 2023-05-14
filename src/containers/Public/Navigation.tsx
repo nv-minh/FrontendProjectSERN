@@ -1,12 +1,12 @@
-import { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { formatVietnameseToString } from '../../ultils/Common/formatVietnameseToString';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions';
 import { Dispatch } from 'redux';
 import { CategoriesAction, PostsAction, RootState } from '../../store/interface';
 import { NavLink } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import path from '../../ultils/constant';
 
 interface props {
   setQueriesEmpty?: React.Dispatch<
@@ -93,6 +93,12 @@ const Navigation = ({ setQueriesEmpty, isAdmin }: props): ReactElement => {
               </div>
             );
           })}
+        <NavLink
+          className="flex items-center justify-center h-full px-3 py-0 hover:bg-secondary2"
+          to={path.CONTACT}
+        >
+          Liên hệ
+        </NavLink>
       </div>
     </div>
   );

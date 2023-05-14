@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import anonAvatar from '../assets/anon-avatar.png';
 import Loading from './Loading';
+import { blodToBase64 } from '../ultils/Common/toBase64';
 
 const User = () => {
   const { currentData } = useSelector((state: RootState) => state.user);
@@ -16,7 +17,7 @@ const User = () => {
     return (
       <div className="flex items-center gap-2">
         <img
-          src={currentData?.avatar || anonAvatar}
+          src={blodToBase64(currentData?.avatar) || anonAvatar}
           alt="avatar"
           className="w-10 object-cover rounded-full h-10 border-2 shadow-md border-white"
         />

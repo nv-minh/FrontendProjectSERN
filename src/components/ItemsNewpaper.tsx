@@ -1,9 +1,11 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useState } from 'react';
 import icons from '../ultils/icons';
 import { IPost } from '../interface';
-import { useNavigate, Link } from 'react-router-dom';
-import path from '../ultils/constant';
+import { useNavigate } from 'react-router-dom';
 import { formatVietnameseToString } from '../ultils/Common/formatVietnameseToString';
+import anonAvatar from '../assets/anon-avatar.png';
+import { blodToBase64 } from '../ultils/Common/toBase64';
+import path from '../ultils/constant';
 
 const indexs = [0, 1, 2, 3];
 const { GrStar, RiHeartFill, RiHeartLine, BsBookmarkStarFill } = icons;
@@ -27,9 +29,10 @@ const ItemsNewpaper = ({
     }
     return stars;
   };
-
   const goDetail = () => {
-    navigate(`chi-tiet/${formatVietnameseToString(title)}/${id}`);
+    navigate(
+      `${path.DETAIL}/${formatVietnameseToString(title?.replaceAll('/', ''))}/${id}`,
+    );
   };
   return (
     <div className="flex w-full p-4  border-t border-orange-600 bg-[#fff9f3]">
@@ -104,7 +107,7 @@ const ItemsNewpaper = ({
         <div className="flex items-center justify-between my-5">
           <div className="flex">
             <img
-              src="https://ss-images.saostar.vn/wp700/pc/1613810558698/Facebook-Avatar_3.png"
+              src={user?.avatar ? blodToBase64(user.avatar) : anonAvatar}
               alt=""
               className="w-[30px] h-[30px]"
             />

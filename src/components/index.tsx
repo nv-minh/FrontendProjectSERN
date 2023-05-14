@@ -15,3 +15,4 @@ export { default as Address } from './Address';
 export { default as Overview } from './Overview';
 export { default as SelectField } from './SelectField';
 export { default as Loading } from './Loading';
+export { default as SliderCustom } from './SliderCustom';

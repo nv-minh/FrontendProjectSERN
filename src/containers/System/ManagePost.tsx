@@ -2,8 +2,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PostsAction, RootState } from '../../store/interface';
 import React, { useEffect, useState } from 'react';
 import * as actions from '../../store/actions';
-import { Pagination } from '../Public';
-import { useSearchParams } from 'react-router-dom';
 import 'moment/locale/vi';
 import moment from 'moment';
 import { Button } from '../../components';

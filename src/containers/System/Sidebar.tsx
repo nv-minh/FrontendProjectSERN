@@ -1,11 +1,12 @@
 import anonAvatar from '../../assets/anon-avatar.png';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import menuSidebar from '../../ultils/menuSidebar';
 import { NavLink } from 'react-router-dom';
 import * as actions from '../../store/actions';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { RootCurrentUser, RootState } from '../../store/interface';
+import { RootState } from '../../store/interface';
 import Swal from 'sweetalert2';
+import { blodToBase64 } from '../../ultils/Common/toBase64';
 
 const activeStyle =
   'hover:bg-gray-200 flex  rounded-md items-center gap-2 py-2 font-bold bg-gray-200';
@@ -20,7 +21,10 @@ const Sidebar = () => {
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
           <img
-            src={anonAvatar}
+            src={
+              (currentData && currentData.avatar && blodToBase64(currentData?.avatar)) ||
+              anonAvatar
+            }
             alt="avatar"
             className="w-12 h-12 object-cover rounded-full border-2 border-white"
           />

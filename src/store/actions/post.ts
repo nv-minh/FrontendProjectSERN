@@ -78,6 +78,7 @@ export const getPostsLimit =
           },
         });
       }
+      return response;
     } catch (error) {
       console.log(error);
     }

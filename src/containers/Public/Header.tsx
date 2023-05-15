@@ -24,7 +24,9 @@ const Header = () => {
   const goLogin = useCallback((flag: string) => {
     navigate(path.LOGIN, { state: { flag } });
   }, []);
-
+  const goNewPost = () => {
+    navigate('/he-thong/tao-moi-bai-dang');
+  };
   const goRegister = useCallback((flag: string) => {
     navigate(path.REGISTER, { state: { flag } });
   }, []);
@@ -93,7 +95,7 @@ const Header = () => {
             textColor="text-white"
             bgColor="!bg-secondary2"
             IcAfter={FaPlusCircle}
-            // onClick={goLogin}
+            onClick={goNewPost}
           />
         </div>
       </div>

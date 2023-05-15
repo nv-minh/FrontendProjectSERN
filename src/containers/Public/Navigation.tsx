@@ -35,13 +35,25 @@ const Navigation = ({ setQueriesEmpty, isAdmin }: props): ReactElement => {
     categoryCode
       ? dispatch(actions.getPostsLimit(1, { categoryCode }) as unknown as PostsAction)
       : dispatch(actions.getPostsLimit(1, {}) as unknown as PostsAction);
-    Swal.fire(
-      'Good job!',
-      category
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 5000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+
+    Toast.fire({
+      icon: 'success',
+      title: category
         ? `Bạn đã tìm kiếm phòng trọ với tiêu chí : ${category}`
         : 'Bạn đã về trang chủ!',
-      'success',
-    );
+    });
+
     setQueriesEmpty &&
       setQueriesEmpty({
         categoriesCode: '',

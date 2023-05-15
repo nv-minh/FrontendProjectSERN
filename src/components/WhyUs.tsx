@@ -14,6 +14,9 @@ const WhyUs = () => {
   const { categories } = useSelector((state: RootState) => state.app);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const goNewPost = () => {
+    navigate('/he-thong/tao-moi-bai-dang');
+  };
   const handleClickFilterPost = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     categoryCode: string,
@@ -77,7 +80,12 @@ const WhyUs = () => {
       <span className="text-gray-700 ">{text.author}</span>
       <h3 className="font-bold text-xl py-2">{text.question}</h3>
       <p className="pb-4">{text.answer}</p>
-      <Button text="Đăng tin ngay" bgColor="bg-secondary2" textColor="text-white" />
+      <Button
+        text="Đăng tin ngay"
+        bgColor="bg-secondary2"
+        textColor="text-white"
+        onClick={() => goNewPost()}
+      />
     </div>
   );
 };

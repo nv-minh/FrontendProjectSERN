@@ -16,6 +16,7 @@ export interface IButtonProps {
   textColor?: string;
   bgColor?: string;
   IcAfter?: IconType;
+  IcBefore?: IconType;
   onClick?: () => void;
   size?: string;
   fullWidth?: boolean;

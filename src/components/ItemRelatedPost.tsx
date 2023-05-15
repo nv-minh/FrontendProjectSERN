@@ -2,6 +2,9 @@ import { IPost } from '../interface';
 import { memo } from 'react';
 import moment from 'moment';
 import 'moment/locale/vi';
+import path from '../ultils/constant';
+import { formatVietnameseToString } from '../ultils/Common/formatVietnameseToString';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface props {
   posts: IPost;
@@ -9,11 +12,24 @@ interface props {
 
 const ItemRelatedPost = (props: props) => {
   const obj = JSON.parse(props.posts.images.image);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const rootUrl = window.location.origin;
+  const goDetail = () => {
+    navigate(
+      `/${path.DETAIL}/${formatVietnameseToString(
+        props.posts.title?.replaceAll('/', ''),
+      )}/${props.posts.id}`,
+    );
+  };
   const formatTime = (createdAt: string) => {
     return moment(createdAt).fromNow();
   };
   return (
-    <div className="w-full flex items-center gap-2 border-b border-gray-500 py-2">
+    <div
+      className="w-full flex items-center gap-2 border-b border-gray-500 py-2 cursor-pointer"
+      onClick={goDetail}
+    >
       <img
         src={obj[0]}
         alt="error"

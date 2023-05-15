@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import logo from '../../assets/logowithoutbg.png';
 import { Button, User } from '../../components';
 import icons from '../../ultils/icons';
 import path from '../../ultils/constant';
-import { useSelector, useDispatch } from 'react-redux';
-import { AuthAction, RootState } from '../../store/interface';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/interface';
 import DropdownMenu from './DropdownMenu';
 
 const { FaPlusCircle } = icons;
@@ -36,7 +36,7 @@ const Header = () => {
   dropdownButton?.addEventListener('click', () => {
     dropdownMenu?.classList.toggle('hidden');
   });
-
+  const onClickNavigate = () => {};
   document.addEventListener('click', (event) => {
     if (
       !(event.target instanceof Node) ||
@@ -48,11 +48,24 @@ const Header = () => {
   return (
     <div ref={headerRef} className="w-[70%]">
       <div className="flex items-center justify-around w-full">
-        <Link to={path.HOME}>
+        <NavLink
+          to="/"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
           <img src={logo} alt="logo" className="w-[240px] h-[70px] object-contain" />
-        </Link>
+        </NavLink>
         <div className="flex gap-1">
-          <small className="pt-2">Phongtro123.com xin chào!</small>
+          <NavLink
+            to={'/'}
+            onClick={() => {
+              navigate('/');
+            }}
+            className="pt-2 cursor-pointer"
+          >
+            Phongtro123.com xin chào!
+          </NavLink>
           {!isLoggedIn && (
             <>
               <Button

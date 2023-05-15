@@ -27,14 +27,14 @@ const SelectField = ({ label, options, setValue, name, value }: props) => {
         id="select-address"
         className="outline-none border border-gray-300 p-2 w-full rounded-md"
         value={value}
-        onChange={(e) =>
+        onChange={(e) => {
           name
             ? setValue((prev: any) => ({
                 ...prev,
                 [name]: e.target.value,
               }))
-            : setValue(e.target.value)
-        }
+            : setValue(e.target.value);
+        }}
       >
         <option>{`--Chọn ${label}`}</option>
         {options &&

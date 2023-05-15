@@ -1,18 +1,20 @@
-import { AiOutlineLogout, AiOutlinePlusCircle } from 'react-icons/ai';
+import { AiFillFacebook, AiOutlineLogout, AiOutlinePlusCircle } from 'react-icons/ai';
 import { GrLinkNext, GrLinkPrevious, GrNext, GrStar } from 'react-icons/gr';
 import {
   BsBookmarkStarFill,
   BsCameraFill,
   BsChevronDown,
   BsChevronRight,
+  BsDot,
   BsHash,
   BsStopwatch,
+  BsTelephoneFill,
 } from 'react-icons/bs';
 import { HiLocationMarker, HiOutlineLocationMarker } from 'react-icons/hi';
-import { TbReportMoney } from 'react-icons/tb';
+import { TbMessages, TbReportMoney } from 'react-icons/tb';
 import { RiCrop2Line, RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import { MdOutlineHouseSiding, MdOutlineLibraryBooks } from 'react-icons/md';
-import { FiSearch } from 'react-icons/fi';
+import { FiFlag, FiSearch } from 'react-icons/fi';
 import { ImBin, ImPencil2 } from 'react-icons/im';
 import { BiUserPin } from 'react-icons/bi';
 import { FaPlusCircle } from 'react-icons/fa';
@@ -23,11 +25,14 @@ const icons = {
   BsChevronRight,
   HiOutlineLocationMarker,
   HiLocationMarker,
+  FiFlag,
+  BsDot,
   BsStopwatch,
   BsHash,
   TbReportMoney,
   RiCrop2Line,
   MdOutlineHouseSiding,
+  BsTelephoneFill,
   FiSearch,
   GrStar,
   RiHeartFill,
@@ -43,5 +48,7 @@ const icons = {
   ImBin,
   BsCameraFill,
   FaPlusCircle,
+  TbMessages,
+  AiFillFacebook,
 };
 export default icons;

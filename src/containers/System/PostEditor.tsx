@@ -1,4 +1,4 @@
-import { Address, Button, Loading, Overview } from '../../components';
+import { Address, Button, Loading, Map, Overview } from '../../components';
 import { useEffect, useState } from 'react';
 import { BsCameraFill } from 'react-icons/bs';
 import { PostsAction, RootState } from '../../store/interface';
@@ -7,6 +7,8 @@ import { apiCreatePost, apiEditPost, apiUploadImages } from '../../services';
 import { ImBin } from 'react-icons/im';
 import Swal from 'sweetalert2';
 import * as actions from '../../store/actions';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { attention } from '../../ultils/constant';
 
 export interface payload {
   payload: {
@@ -74,6 +76,22 @@ const PostEditor = ({ currentPost, setIsEdit, setCurrentPost }: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const { currentData } = useSelector((state: RootState) => state.user);
   const { categories } = useSelector((state: RootState) => state.app);
+  const [latLng, setLatLng] = useState<any>({ lat: 21.12453, lng: 105.82714 });
+
+  useEffect(() => {
+    // navigator.geolocation.getCurrentPosition(({ coords: { longitude, latitude } }) => {
+    //   setLatLng({
+    //     lat: latitude,
+    //     lng: longitude,
+    //   });
+    // });
+    const getCoords = async () => {
+      const result = await geocodeByAddress('Montevideo, Uruguay');
+      const latLng = await getLatLng(result[0]);
+      console.log(latLng);
+    };
+    getCoords();
+  }, [payload && payload?.address]);
   const dispatch = useDispatch();
 
   const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -220,8 +238,6 @@ const PostEditor = ({ currentPost, setIsEdit, setCurrentPost }: any) => {
     ) {
       await Swal.fire('Oops!', 'Có lỗi xảy ra, hãy kiểm tra lại!', 'error');
     } else {
-      console.log(finalPayload.images);
-      console.log(JSON.parse(currentPost[0].images.image));
       if (
         currentPost &&
         currentPost[0].categoryCode === finalPayload.categoryCode &&
@@ -320,7 +336,6 @@ const PostEditor = ({ currentPost, setIsEdit, setCurrentPost }: any) => {
             errorArea={errorValidation.errorArea}
             errorDescription={errorValidation.errorDescription}
             currentPost={currentPost}
-            setCurrentPost={setCurrentPost}
           />
           <div className="w-full mb-6">
             <h2 className="font-semibold text-xl py-4">Hình ảnh</h2>
@@ -399,7 +414,19 @@ const PostEditor = ({ currentPost, setIsEdit, setCurrentPost }: any) => {
           <div className="h-[100px] w-full "></div>
         </div>
 
-        <div className="w-[30%]  flex-none">Map</div>
+        <div className="w-[30%]  flex-none">
+          <div className="h-[40%] w-full rounded-md">
+            <Map latLng={latLng} />
+          </div>
+          <div className="mt-8 bg-orange-200 text-orange-900 p-4 rounded-md">
+            <h4 className="text-xl font-medium">Lưu ý tin đăng</h4>
+            <ul className="text-sm list-disc pl-6 text-justify">
+              {attention.map((item, index) => {
+                return <li key={index}>{item}</li>;
+              })}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

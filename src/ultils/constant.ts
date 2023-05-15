@@ -22,7 +22,15 @@ export const text = {
   HOME_DESCRIPTION:
     'Kênh thông tin Phòng Trọ số 1 Việt Nam - Website đăng tin cho thuê phòng trọ, nhà nguyên căn, căn hộ, ở ghép nhanh, hiệu quả với 100.000+ tin đăng và 2.500.000 lượt xem mỗi tháng.',
 };
-
+export const attention = [
+  'Nội dung phải viết bằng tiếng việt có dấu',
+  'Tiêu đề tin đăng không dài quá 100 kí tự',
+  'Các bạn nên điền đ đủ thông tin vào các mục để tin đăng có hệu quả hơn.',
+  'Để tăng độ tin cậy và tin rao được nhiều người quan tâm hơn, hãy sửa vị trí rao tin của bạn trên bản đồ bằng cách kéo icon tới đúng vị trí cu tin rao.',
+  'Tin đăng có hình ảnh rõ ràng sẽ được xem và gọi gấp nhều lần so với tin rao không có ảnh. Hãy đăng ảnh để được giao dịch thành công!',
+];
+export const contentMap =
+  'Bạn đang xem nội dung tin đăng. Mọi thông tin liên quan đến tin đăng này chỉ mang tính chất tham khảo. Nếu bạn có phản hồi với tin đăng này (báo xấu, tin đã cho thuê, không liên lạc được,...), vui lòng thông báo để PhòngTrọ123 có thể xử lý.';
 export const location = [
   {
     name: 'Phòng Trọ Hồ Chí Minh',

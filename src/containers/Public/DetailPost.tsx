@@ -1,32 +1,39 @@
 import { useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { PostsAction, RootState } from '../../store/interface';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/interface';
 import { useEffect, useState } from 'react';
-import { Loading, SliderCustom } from '../../components';
-import * as actions from '../../store/actions';
+import { BoxInfo, Loading, Map, RelatedPost, SliderCustom } from '../../components';
 import icons from '../../ultils/icons';
+import { contentMap } from '../../ultils/constant';
+import { FiFlag } from 'react-icons/fi';
+import download from '../../assets/download.png';
 
 const DetailPost = () => {
   const path = useLocation();
   const postId = path?.pathname.split('/')[path?.pathname.split('/').length - 1];
-  const { posts, newsPost } = useSelector((state: RootState) => state.posts);
-  const dispatch = useDispatch();
+  const [latLng, setLatLng] = useState<any>({ lat: 21.12453, lng: 105.82714 });
+  const location = useLocation();
   const [postDetail, setPostDetail] = useState<any>();
   const { HiLocationMarker, TbReportMoney, RiCrop2Line, BsStopwatch, BsHash } = icons;
-  const matchedPost =
-    posts?.find((post: any) => post.id === postId) ||
-    newsPost?.find((newsPost: any) => newsPost.id === postId);
+  const { posts, newsPost } = useSelector((state: RootState) => state.posts);
+
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(({ coords: { longitude, latitude } }) => {
+      setLatLng({
+        lat: latitude,
+        lng: longitude,
+      });
+    });
+    const matchedPost =
+      posts?.find((post: any) => post.id === postId) ||
+      newsPost?.find((newsPost: any) => newsPost.id === postId);
+    console.log('123');
     const fetchData = async () => {
       try {
-        const result = await dispatch(
-          actions.getPostsLimit(1, {}) as unknown as PostsAction,
-        );
-        const data = result?.data.rows;
         if (matchedPost) {
           setPostDetail(matchedPost);
-        } else if (data.length > 0) {
-          setPostDetail(data[0]);
+          console.log(matchedPost);
+          console.log(postDetail);
         }
       } catch (error) {
         console.error(error);
@@ -34,10 +41,10 @@ const DetailPost = () => {
       }
     };
 
-    if (!postDetail && matchedPost) {
+    if (matchedPost) {
       fetchData();
     }
-  }, [postDetail, matchedPost]);
+  }, [postDetail, location.pathname]);
   // If there is a match, update the postDetail state
   if (!postDetail) return <Loading />;
   return (
@@ -54,7 +61,7 @@ const DetailPost = () => {
             <div className="flex items-center gap-2">
               <span>Chuyên mục: </span>
               <span className="text-blue-600 underline font-medium hover:text-orange-600 cursor-pointer">
-                {postDetail?.overviews.area}
+                {postDetail?.overviews && postDetail?.overviews.area}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -85,8 +92,10 @@ const DetailPost = () => {
           <div className="w-full pl-5">
             <h3 className="font-semibold text-lg mt-4 my-4">Thông tin mô tả</h3>
             <div className="flex flex-col justify-center gap-1">
-              {postDetail.description &&
-                JSON.parse(postDetail.description)?.map((item: any, index: any) => {
+              {postDetail &&
+                postDetail.description &&
+                Array.isArray(JSON.parse(postDetail.description)) &&
+                JSON.parse(postDetail.description).map((item: any, index: any) => {
                   return <span key={index}>{item}</span>;
                 })}
             </div>
@@ -145,9 +154,31 @@ const DetailPost = () => {
               </tbody>
             </table>
             <div className="h-[50px]"></div>
+            <div className="h-[400px] w-full">
+              <Map latLng={latLng} />
+            </div>
+            <p className="pt-4 text-gray-500 italic px-2">{contentMap}</p>
+            <div
+              className="flex border border-blue-600 items-center w-[130px] h-[50px] justify-around rounded-md mt-4 py-2 cursor-pointer"
+              onClick={() => {
+                window.location.href = '/lien-he';
+              }}
+            >
+              <FiFlag color="blue" />
+              <p className="text-blue-700 hover:underline font-medium">Gửi phản hồi</p>
+            </div>
+            <div className="h-[50px]"></div>
           </div>
         </div>
-        <div className="w-[30%] flex bg-white rounded-md shadow-md">content</div>
+        <div className="w-[30%] flex bg-white rounded-md shadow-md">
+          <div className="w-full flex flex-col">
+            <BoxInfo props={postDetail.user} />
+            <RelatedPost />
+            <img src={download} alt="" />
+            <img src={download} alt="" />
+            <img src={download} alt="" />
+          </div>
+        </div>
       </div>
     </div>
   );

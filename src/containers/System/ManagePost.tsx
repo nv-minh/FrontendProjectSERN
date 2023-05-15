@@ -20,7 +20,7 @@ const ManagePost = () => {
   useEffect(() => {
     dispatch(actions.getPostsLimitAdmin(1) as unknown as PostsAction);
     setPosts(yourPosts);
-  }, [posts, isEdit]);
+  }, [isEdit]);
 
   const checkExpired = (date: string) => {
     const now = moment(); // Lấy thời gian hiện tại

@@ -16,7 +16,6 @@ interface props extends payload {
   errorArea: boolean;
   errorDescription: boolean;
   currentPost: any;
-  setCurrentPost: any;
 }
 
 const Overview = ({
@@ -29,12 +28,11 @@ const Overview = ({
   errorArea,
   errorDescription,
   currentPost,
-  setCurrentPost,
 }: props) => {
   const { categories } = useSelector((state: RootState) => state.app);
   const { currentData } = useSelector((state: RootState) => state.user);
   let valuePrice =
-    currentPost && !payload.priceNumber
+    currentPost && currentPost[0] && !payload.priceNumber
       ? (currentPost[0].priceNumber * 1000000).toLocaleString('it-IT', {
           style: 'currency',
           currency: 'VND',

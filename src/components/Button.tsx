@@ -6,6 +6,7 @@ const Button = ({
   textColor,
   bgColor,
   IcAfter,
+  IcBefore,
   onClick,
   fullWidth,
   size,
@@ -17,6 +18,7 @@ const Button = ({
       } outline-none rounded-md hover:underline flex items-center justify-center gap-1`}
       onClick={onClick}
     >
+      {IcBefore != null && <IcBefore />}
       {text}
       {IcAfter != null && <IcAfter />}
     </button>

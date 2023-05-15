@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CurrentUserAction, RootState } from '../../store/interface';
 import anonAvatar from '../../assets/anon-avatar.png';
-import bla from '../../assets/bla.png';
 import download from '../../assets/download.png';
 import { Button } from '../../components';
 import { apiUpdateUser } from '../../services/user';
@@ -229,7 +228,6 @@ const EditAccount = () => {
           </div>
         </div>
         <div className="flex gap-5">
-          <img src={bla} alt="" className="rounded-md flex-1 w-1/2" />
           <img src={download} alt="" className="rounded-md flex-1" />
         </div>
       </div>

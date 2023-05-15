@@ -41,7 +41,7 @@ const ItemsNewpaper = ({
         onClick={goDetail}
       >
         {imageCount &&
-          imageCount > 4 &&
+          imageCount > 0 &&
           images
             ?.filter((item: {}, index: number) => indexs.some((i) => i === index))
             ?.map((linkImage: string) => {

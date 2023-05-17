@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: `https://api-projectsern.onrender.com`,
+  baseURL: `https://test.dadsnetwork.net`,
   // paramsSerializer: {
   //   serialize: (params) => Qs.stringify(params, { arrayFormat: 'brackets' }),
   // },
